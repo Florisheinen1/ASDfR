@@ -1,0 +1,29 @@
+# 1.1.1
+
+Proof that the system works can be seen in photo `it_works.png`
+
+1: Describe in your own words what the parameters depth and history do...
+	I expect 'history' to define whether to keep incoming frames or to discard them. The depth could then
+	indicate how many frames should be kept before they need to be discarded.
+	The stream is sent over UDP, and there are no guarantees whether the frames arrive, nor whether they
+	arrive in order. If order is important, you could for example withhold handling a frame for a bit if
+	you expect an older frame to arrive soon, which requires storing a few frames. A depth thats too
+	high might start lagging your machine due to a lack of memory. A depth of 1 and you cannot compare
+	different frames.
+2: What is the frame rate of the generated messages?...
+	The framerate that the videoserver emits is defined in the `videoserver.py` script, at `FPS = 30.0` on
+	line 17. This is then supposed to send 30 frames per second. Additionally, This is however limited by what my webcam
+	allows for, and eventually also the network over which the stream is sent. On my local pc, the noise and
+	delay is basically non-existent, but on a remote device with limited power, this can already get
+	significantly difficult. // TODO: Is this really what depth means?
+
+# 1.1.2
+
+	For this assignment, we need two extra nodes: One that measures the brightness, and publishes whether
+	that brightness is bright enough, and a node that actually proves the detector succesfully publishes
+	the messages. To calculate the brightness of an image, we summed up the red, green and blue values of
+	each pixel, averaged them, and in turn averaged all of these for every pixel into a single brightess
+	value. If this brightness was above 50, we would emit "on", and otherwise "off". The printer node
+	simply subscribes to this and prints the received message. This can be seen in photos `lights_on.png`
+	and `lights_off.png`.
+
