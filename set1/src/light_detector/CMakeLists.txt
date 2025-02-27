@@ -16,10 +16,13 @@ find_package(std_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
 
 add_executable(lightdetector src/lightdetector.cpp)
+add_executable(lightprinter src/lightprinter.cpp)
 ament_target_dependencies(lightdetector rclcpp std_msgs sensor_msgs)
+ament_target_dependencies(lightprinter rclcpp std_msgs sensor_msgs)
 
 install(TARGETS
   lightdetector
+  lightprinter
   DESTINATION lib/${PROJECT_NAME})
 
 ament_package()
