@@ -6,31 +6,31 @@
 
 class LightDetector : public rclcpp::Node {
 public:
-	LightDetector() : Node("lightdetector"), brightness_threshold(50) {
+	LightDetector() : Node("lightdetector") {
 
-	auto topic_callback = [this](sensor_msgs::msg::Image::SharedPtr image) -> void {
-		int brightness = this->calculate_brightness(image);
-		bool lights_on = brightness > this->brightness_threshold;
+		this->declare_parameter("brightness_threshold", 50);
 
-		RCLCPP_INFO(this->get_logger(), "Lights on: %d (brightness: %d)", lights_on, brightness);
-		
-		auto message = std_msgs::msg::String();
-		message.data = lights_on ? "on" : "off";
-		this->publisher_->publish(message);
-		
-	};
+		auto topic_callback = [this](sensor_msgs::msg::Image::SharedPtr image) -> void {
+			int brightness = this->calculate_brightness(image);
+			int threshold = this->get_parameter("brightness_threshold").as_int();
+			bool lights_on = brightness > threshold;
 
-	publisher_ = this->create_publisher<std_msgs::msg::String>("/lights", 10);
+			RCLCPP_INFO(this->get_logger(), "Lights on: %d (brightness: %d)", lights_on, brightness);
+			
+			auto message = std_msgs::msg::String();
+			message.data = lights_on ? "on" : "off";
+			this->publisher_->publish(message);
+			
+		};
 
-	subscription_ = this->create_subscription<sensor_msgs::msg::Image>("/image", 10, topic_callback);
+		publisher_ = this->create_publisher<std_msgs::msg::String>("/lights", 10);
 
-}
+		subscription_ = this->create_subscription<sensor_msgs::msg::Image>("/image", 10, topic_callback);
+	}
 
 private:
 	rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr subscription_;
 	rclcpp::Publisher<std_msgs::msg::String>::SharedPtr publisher_;
-	int brightness_threshold;
-
 
 	int calculate_brightness(sensor_msgs::msg::Image::SharedPtr image) const {
 		int width = image->width;

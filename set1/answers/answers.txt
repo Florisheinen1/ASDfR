@@ -27,3 +27,10 @@ Proof that the system works can be seen in photo `it_works.png`
 	simply subscribes to this and prints the received message. This can be seen in photos `lights_on.png`
 	and `lights_off.png`.
 
+# 1.1.3
+
+	The parameter was added. The room was darker than before, so now a default threshold of 50 was not
+	enough to distinguish between lights on and off, as the brightness was 37 when the lights were on.
+	Setting the threshold to 30 meant the detector worked again as expected. Proof the parameter can be
+	modified while the package is already running can be found in `parameter_set_during.png`, and proof
+	for setting the argument at startup can be found in `parameter_set_initial.png`.
