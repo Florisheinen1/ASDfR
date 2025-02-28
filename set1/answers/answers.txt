@@ -34,3 +34,15 @@ Proof that the system works can be seen in photo `it_works.png`
 	Setting the threshold to 30 meant the detector worked again as expected. Proof the parameter can be
 	modified while the package is already running can be found in `parameter_set_during.png`, and proof
 	for setting the argument at startup can be found in `parameter_set_initial.png`.
+
+# 1.1.4
+
+	I made a package for filtering colored images called `filterer`. This initially only contained
+	the node greyscaler, but I found that my green rubber ducky is too similar in grey as my own face,
+	and since I like seeing my face, I had to resort to a different color detection method. That was
+	implemented in the filterer/masker node. This node picks all pixels that have a specific red/blue 
+	to green ratio with a minimum brightness, and creates and publishes a new black and white image.
+	White pixels indicate the color green, and black the lack of green.
+	This published masked image is then received by the `tracker` package, that calculates the center
+	of gravity from the coordinates of all the white pixels, and prints that center.
+	Proof can be found in image `center_of_gravity.png`.
