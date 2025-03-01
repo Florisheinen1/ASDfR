@@ -58,7 +58,8 @@ private:
 			}
 		}
 
-		if (pixel_count == 0) {
+		// If there are no pixels (or very few), assume we do not see our target
+		if (pixel_count < 20) {
 			return std::make_pair<int, int>(0, 0);
 		}
 
