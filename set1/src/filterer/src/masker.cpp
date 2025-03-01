@@ -17,13 +17,17 @@ public:
 		this->declare_parameter("minimum_brightness", 50);
 		this->declare_parameter("use_target_color", true);
 
+		this->declare_parameter("image_topic", "/image");
+
 		auto topic_callback = [this](sensor_msgs::msg::Image::SharedPtr colored) -> void {
 			auto masked = mask_image(colored);
 			publisher_->publish(*masked);
 		};
 
 		publisher_ = this->create_publisher<sensor_msgs::msg::Image>("/mask", 10);
-		subscription_ = this->create_subscription<sensor_msgs::msg::Image>("/image", 10, topic_callback);
+		
+		std::string image_topic = this->get_parameter("image_topic").as_string();
+		subscription_ = this->create_subscription<sensor_msgs::msg::Image>(image_topic, 10, topic_callback);
 	}
 
 private:
