@@ -1,6 +1,7 @@
 #include "rclcpp/rclcpp.hpp"
 #include "std_msgs/msg/string.hpp"
 #include "sensor_msgs/msg/image.hpp"
+#include "geometry_msgs/msg/point.hpp"
 #include <cmath>
 #include <algorithm>
 #include <float.h>
@@ -16,13 +17,21 @@ public:
 			auto x = object_center.first;
 			auto y = object_center.second;
 
+			auto msg = geometry_msgs::msg::Point();
+			msg.x = x;
+			msg.y = y;
+			msg.z = 0.0; // Ignored
+			publisher_->publish(msg);
+
 			RCLCPP_INFO(this->get_logger(), "Object at x: %d, y: %d", x, y);
 		};
 
+		publisher_ = this->create_publisher<geometry_msgs::msg::Point>("/trackpos", 10);
 		subscription_ = this->create_subscription<sensor_msgs::msg::Image>("/mask", 10, topic_callback);
 	}
 
 private:
+	rclcpp::Publisher<geometry_msgs::msg::Point>::SharedPtr publisher_;
 	rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr subscription_;
 
 	/// @brief Calculates the center of gravity from provided masked image
@@ -56,7 +65,15 @@ private:
 		// And calculate the average
 		int center_x = sum_x / pixel_count;
 		int center_y = sum_y / pixel_count;
-		return std::make_pair(center_x, center_y);
+		
+		// Get center of image
+		int center_image_x = width / 2;
+		int center_image_y = height / 2;
+
+		// And calculate relative position compared to center of image
+		int relative_center_x = center_x - center_image_x;
+		int relative_center_y = center_y - center_image_y;
+		return std::make_pair(relative_center_x, relative_center_y);
 	}
 };
 
