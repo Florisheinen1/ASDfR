@@ -1,0 +1,53 @@
+## 2.1
+1.
+	Explain what timing aspects we are interested in and why. Keep in mind that the course is
+on software development for robotics; a typical use case here is doing closed-loop control
+with a given sample time. Give at least two ways of representing the measured data.
+Discuss advantages and disadvantages of them.
+
+In a closed loop control system, timing is important for accuracte calculations. Specifically,
+consistency (a lack of jitter) between measurements. To measure this, we can distinguish in
+three use cases. Jitter with no load and jitter with load.
+A second measurement is latency between measuring that 1ms has passed, and the program responding
+to it.
+
+2.
+	Explain why you have chosen the method you used (either clock_nanosleep or
+timer_create/sigwait). What are advantages and disadvantages of both methods?
+
+With clock_nanosleep, we calculate when the next millisecond has passed ourselves,
+and wait until that time has passed, and then continue again. This all happen on a
+single thread. The timer_create and sigwait spawns a timer on a different thread,
+so our calculations can wait with sigwait until it receives a signal that a 
+millisecond has passed. We chose the clock_nanosleep, which is relatively simpler
+to implement, and is single threaded, so when using our xenomai system, we can stay
+on a single thread. The downside is that on many robotic systems, the entire loop
+works with signals and interrupts, so in a way, clock_nanosleep is less accurate.
+
+3.
+	What is the difference between CLOCK_MONOTONIC and CLOCK_REALTIME? Which
+one is better for timing a firm real-time loop?
+
+According to the internet, CLOCK_REALTIME "looks at the wallclock", which means it
+is dependent on system settings and can vary in unexpected ways. If the user changes
+the system's timezone or related settings, the measurements can suddenly be a few hours
+off. The CLOCK_MONOTONIC is specifically created to measure elapsed times.
+According to stack overflow however, this CLOCK_MONOTONIC does not measure time elapsed
+in suspend on some linux systems. As long as the process will not suspend during our
+calculations (which is the case in the clock_nanosleep), so we are fine using this one.
+
+4.
+	When using timer_create/sigwait, what happens with the timer you initialized
+when the program ends? And what happens when it crashes due to some error?
+
+It is important to stop and free all resources used by the timer, since that is not
+automatically done when the program crashes or stops.
+
+5.
+	Is it a good idea to use the approach used in this subassignment for closed-loop control
+of a robotic system? Why (not)?
+
+In conclusion, I think for a xenomai system, both methods are fine, but the clock_nanosleep
+is the most convenient, as this single threaded approach is supposed to have less overhead.
+If the robotic system works as an embedded device with interrupts made by hardware timers,
+it would be better to use the signal approach as explained before.
