@@ -26,7 +26,7 @@ void* prog_thread(void* arg) {
 
         // should approx take little less than 1 ms
         for(int j=0;j<=50000;j++){
-            sin(i/10)*cos(i/10);
+          j*j*+j/j-j%j;
         } 
 
         clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &next, NULL); // or CLOCK_REALTIME
