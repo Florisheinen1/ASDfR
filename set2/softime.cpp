@@ -5,59 +5,204 @@
 #include <fstream>
 #include <iostream>
 #include <cmath>
+#include <memory>
+#include <vector>
+#include <numeric>
 
-#define NS2S 1000000000
+#include <evl/thread.h>
+#include <evl/clock.h>
+
+#define ONE_S_IN_NS 1000000000
+#define ONE_MS_IN_NS 1000000
+#define TOTAL_MEASUREMENTS 5 * 1000 // 5 seconds * 1000 ms
+
+/// @brief Calculates what time would be 1 ms after 'last time'
+/// @param last_time the time to which 1 ms should be added
+/// @return The last time plus one millisecond
+struct timespec add_one_millisecond(const struct timespec &last_time) {
+	struct timespec next_time = last_time;
+
+	next_time.tv_nsec += ONE_MS_IN_NS;
+
+	// Make sure we add new seconds as well
+	if (next_time.tv_nsec >= ONE_S_IN_NS) {
+		next_time.tv_nsec -= ONE_S_IN_NS; // Remove second in the nanoseconds
+		next_time.tv_sec++; // Add second in the seconds
+	}
+	return next_time;
+}
+
+/// @brief Calculates whether the given integer is a prime. Intended to keep CPU busy
+/// Source: Stackoverflow
+/// @param n The number to check
+/// @return Whether n is prime
+bool isPrime(int number){
+	if(number < 2) return false;
+	if(number == 2) return true;
+	if(number % 2 == 0) return false;
+	for(int i=3; (i*i)<=number; i+=2){
+		if(number % i == 0 ) return false;
+	}
+	return true;
+
+}
+
+/// @brief Performs some random calculations (check is prime) to keep the CPU busy
+/// Supposed to take a fraction of 1 millisecond
+void do_random_calculations() {
+	for (int i = 0; i < 1000; i++) {
+		isPrime(i);
+	}
+}
+
+/// @brief Calculates the time in microseconds between given times
+/// @param start The start time
+/// @param end The end time
+/// @return The microseconds difference
+long micros_between_timestamps(const struct timespec &start, const struct timespec &end) {
+	long s_difference = end.tv_sec - start.tv_sec;
+	long ns_difference = end.tv_nsec - start.tv_nsec;
+
+	// Handle nanosecond underflow
+	if (ns_difference < 0) {
+		s_difference -= 1;
+		ns_difference += ONE_S_IN_NS;
+	}
+
+	return s_difference * ONE_MS_IN_NS + (ns_difference / 1000);
+}
+
+/// @brief Calculates the standard deviation
+/// @param samples 
+/// @param n_samples 
+/// @param mean 
+/// @return standard deviation
+double calculate_standard_deviation(int samples[], int n_samples, double mean) {
+	double diff_sum = 0;
+	for (int i = 0; i < n_samples; i++) {
+		diff_sum += static_cast<double>(samples[i]) - mean;
+	}
+	double variance = diff_sum / static_cast<double>(n_samples);
+	return sqrt(variance);
+}
+
+/// @brief Performs time measurements
+/// @param n_measurements Amount of measurements to take
+/// @return The results
+std::unique_ptr<std::vector<int>> perform_measurements(int n_measurements) {
+	auto measurements = std::make_unique<std::vector<int>>();
+
+	struct timespec start_measurement, expected_measurement, end_measurement;
+	
+	clock_gettime(CLOCK_MONOTONIC, &start_measurement);
+	expected_measurement = add_one_millisecond(start_measurement);
+
+	for (int i = 0; i < n_measurements; i++) {
+
+		do_random_calculations();
+
+		int result = clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &expected_measurement, NULL);
+		// Check if sleeping went correctly
+		if (result != 0) {
+			printf("Error happened during clock_nanosleep");
+			exit(EXIT_FAILURE);
+		}
+
+		clock_gettime(CLOCK_MONOTONIC, &end_measurement);
+
+		// Now, we can calculate how long it took exactly
+		int timediff = static_cast<int>(micros_between_timestamps(expected_measurement, end_measurement));
+		
+		measurements->push_back(timediff);
+
+		// And update our next and last measurement timestamps
+		start_measurement = expected_measurement;
+		expected_measurement = add_one_millisecond(start_measurement);
+	}
+
+	return measurements;
+}
+
+// /// @brief Performs realtime time measurements
+// /// @param n_measurements Number of measurements to take
+// /// @return the measurements
+// std::unique_ptr<std::vector<int>> perform_evl_measurements(int n_measurements) {
+//     auto measurements = std::make_unique<std::vector<int>>();
+
+//     struct timespec start_time, expected_time, end_time;
+
+//     // Attach the thread to the EVL real-time core
+//     evl_attach_self("rt-measurements");
+
+//     // Read the current EVL clock time
+//     evl_read_clock(EVL_CLOCK_MONOTONIC, &start_time);
+//     expected_time = add_one_millisecond(start_time);
+
+//     for (int i = 0; i < n_measurements; i++) {
+//         do_random_calculations();  // Simulate load
+
+//         // Sleep until the expected timestamp
+//         int result = evl_sleep(&expected_time);
+//         if (result != 0) {
+//             perror("Error during evl_sleep");
+//             exit(EXIT_FAILURE);
+//         }
+
+//         // Read actual wake-up time
+//         evl_read_clock(EVL_CLOCK_MONOTONIC, &end_time);
+
+//         // Calculate the time difference
+//         int timediff = static_cast<int>(micros_between_timestamps(expected_time, end_time));
+//         measurements->push_back(timediff);
+
+//         // Update timestamps for next cycle
+//         start_time = expected_time;
+//         expected_time = add_one_millisecond(start_time);
+//     }
+
+//     return measurements;
+// }
+
+/// @brief Calculates the mean and standard deviation of given samples
+/// @param samples The samples
+/// @return The mean and standard deviation
+std::pair<double, double> calculate_stats(std::unique_ptr<std::vector<int>>& samples) {
+	size_t sample_size = samples->size();
+
+	double mean = std::accumulate(samples->begin(), samples->end(), 0.0) / sample_size;
+	
+	double variance = std::accumulate(samples->begin(), samples->end(), 0.0, 
+		[mean](double sum, int value) {
+			return sum + (value - mean) * (value - mean);
+		}) / sample_size;
+
+	double standard_deviation = sqrt(variance);
+
+	return std::make_pair(mean, standard_deviation);
+}
 
 // Thread function to perform timed execution
 void* prog_thread(void* arg) {
-    struct timespec period, start_time, end_time, next;
-    period.tv_sec = 0;
-    period.tv_nsec = 1000000; // Convert milliseconds to nanoseconds
+	auto measurements = perform_measurements(TOTAL_MEASUREMENTS);
+	
+	auto stats = calculate_stats(measurements);
 
-    // Get current time
-    clock_gettime(CLOCK_MONOTONIC, &next); // or CLOCK_REALTIME
-    int i = 0;
-    long final_time;
-    long list[10000];
-    while (i<10000) {
-        clock_gettime(CLOCK_MONOTONIC, &start_time);
-        next.tv_sec += (next.tv_nsec + period.tv_nsec) / NS2S;
-        next.tv_nsec = (next.tv_nsec + period.tv_nsec) % NS2S;
+	printf("Mean: %f microseconds, std: %f microseconds\n", stats.first, stats.second);
 
-        // should approx take little less than 1 ms
-        for(int j=0;j<=50000;j++){
-          j*j*+j/j-j%j;
-        } 
-
-        clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &next, NULL); // or CLOCK_REALTIME
-        clock_gettime(CLOCK_MONOTONIC, &end_time);
-
-        final_time = (end_time.tv_nsec - start_time.tv_nsec) + (end_time.tv_sec - start_time.tv_sec) * NS2S;
-        final_time -=  1000000;
-        list[i] = final_time;
-        i++;
-    }
-    printf("The final time is: %ld ns\n", final_time);
-    std::ofstream outFile("list_normal.csv");
-    
-    for (int i = 1; i < 10000; ++i) {
-        outFile << list[i];
-        if (i != 9999) 
-            outFile << ","; // Avoid adding a comma after the last number
-    }
-    
-    outFile.close(); // Close the file stream
-    return NULL;
+	return NULL;
 }
 
 int main() {
-    pthread_t thread_id;
+	pthread_t thread_id;
 
-    // Create a POSIX thread
-    pthread_create(&thread_id, NULL, prog_thread, NULL);
+	// Create a POSIX thread
+	pthread_create(&thread_id, NULL, prog_thread, NULL);
 
-    // Wait for the thread to finish
-    pthread_join(thread_id, NULL);
+	// Wait for the thread to finish
+	pthread_join(thread_id, NULL);
 
-    return 0;
+	// Create EVL thread
+	// TODO: This
+
+	return 0;
 }
