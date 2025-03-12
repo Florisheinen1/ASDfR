@@ -245,7 +245,7 @@ int main() {
 	pthread_attr_init(&thread_attributes);
 	pthread_attr_setinheritsched(&thread_attributes, PTHREAD_EXPLICIT_SCHED);
 	pthread_attr_setschedpolicy(&thread_attributes, SCHED_FIFO);
-	// thread_schedule_parameters.sched_priority = 99; // Values usually range from 1 to 99 for real-time policies
+	thread_schedule_parameters.sched_priority = 99; // Values usually range from 1 to 99 for real-time policies
 	pthread_attr_setschedparam(&thread_attributes, &thread_schedule_parameters);
 	CPU_ZERO(&cpuset);
 	CPU_SET(1, &cpuset);
