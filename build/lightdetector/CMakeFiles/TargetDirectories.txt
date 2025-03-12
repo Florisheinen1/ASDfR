@@ -1,0 +1,11 @@
+/home/man1/ASDfR/build/lightdetector/CMakeFiles/uninstall.dir
+/home/man1/ASDfR/build/lightdetector/CMakeFiles/lightdetector_uninstall.dir
+/home/man1/ASDfR/build/lightdetector/CMakeFiles/lightdetector.dir
+/home/man1/ASDfR/build/lightdetector/CMakeFiles/lightprinter.dir
+/home/man1/ASDfR/build/lightdetector/CMakeFiles/test.dir
+/home/man1/ASDfR/build/lightdetector/CMakeFiles/edit_cache.dir
+/home/man1/ASDfR/build/lightdetector/CMakeFiles/rebuild_cache.dir
+/home/man1/ASDfR/build/lightdetector/CMakeFiles/list_install_components.dir
+/home/man1/ASDfR/build/lightdetector/CMakeFiles/install.dir
+/home/man1/ASDfR/build/lightdetector/CMakeFiles/install/local.dir
+/home/man1/ASDfR/build/lightdetector/CMakeFiles/install/strip.dir

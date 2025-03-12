@@ -1,0 +1,75 @@
+[0.031s] Invoking command in '/home/man1/ASDfR/build/asg1_2': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake /home/man1/ASDfR/set1/src/asg1_2 -DCMAKE_INSTALL_PREFIX=/home/man1/ASDfR/install/asg1_2
+[0.179s] -- The C compiler identification is GNU 13.3.0
+[0.310s] -- The CXX compiler identification is GNU 13.3.0
+[0.333s] -- Detecting C compiler ABI info
+[0.469s] -- Detecting C compiler ABI info - done
+[0.481s] -- Check for working C compiler: /usr/bin/cc - skipped
+[0.481s] -- Detecting C compile features
+[0.482s] -- Detecting C compile features - done
+[0.493s] -- Detecting CXX compiler ABI info
+[0.671s] -- Detecting CXX compiler ABI info - done
+[0.681s] -- Check for working CXX compiler: /usr/bin/c++ - skipped
+[0.681s] -- Detecting CXX compile features
+[0.681s] -- Detecting CXX compile features - done
+[0.692s] -- Found ament_cmake: 2.5.3 (/opt/ros/jazzy/share/ament_cmake/cmake)
+[0.926s] -- Found Python3: /usr/bin/python3 (found version "3.12.3") found components: Interpreter 
+[1.095s] -- Found rclcpp: 28.1.6 (/opt/ros/jazzy/share/rclcpp/cmake)
+[1.154s] -- Found rosidl_generator_c: 4.6.5 (/opt/ros/jazzy/share/rosidl_generator_c/cmake)
+[1.171s] -- Found rosidl_generator_cpp: 4.6.5 (/opt/ros/jazzy/share/rosidl_generator_cpp/cmake)
+[1.188s] -- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+[1.208s] -- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+[1.308s] -- Found rmw_implementation_cmake: 7.3.1 (/opt/ros/jazzy/share/rmw_implementation_cmake/cmake)
+[1.313s] -- Found rmw_fastrtps_cpp: 8.4.1 (/opt/ros/jazzy/share/rmw_fastrtps_cpp/cmake)
+[1.436s] -- Found OpenSSL: /usr/lib/x86_64-linux-gnu/libcrypto.so (found version "3.0.13")  
+[1.461s] -- Found FastRTPS: /opt/ros/jazzy/include (Required is at least version "2.13") 
+[1.492s] -- Using RMW implementation 'rmw_fastrtps_cpp' as default
+[1.583s] -- Found geometry_msgs: 5.3.5 (/opt/ros/jazzy/share/geometry_msgs/cmake)
+[1.624s] -- Found sensor_msgs: 5.3.5 (/opt/ros/jazzy/share/sensor_msgs/cmake)
+[1.653s] -- Found example_interfaces: 0.12.0 (/opt/ros/jazzy/share/example_interfaces/cmake)
+[1.737s] -- Found OpenCV: /usr (found version "4.6.0") 
+[1.743s] -- Found cv_bridge: 4.1.0 (/opt/ros/jazzy/share/cv_bridge/cmake)
+[1.898s] -- Configuring done (1.9s)
+[1.937s] -- Generating done (0.0s)
+[1.948s] -- Build files have been written to: /home/man1/ASDfR/build/asg1_2
+[1.976s] Invoked command in '/home/man1/ASDfR/build/asg1_2' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake /home/man1/ASDfR/set1/src/asg1_2 -DCMAKE_INSTALL_PREFIX=/home/man1/ASDfR/install/asg1_2
+[1.978s] Invoking command in '/home/man1/ASDfR/build/asg1_2': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake --build /home/man1/ASDfR/build/asg1_2 -- -j12 -l12
+[2.043s] gmake[2]: Warning: File '/home/man1/ASDfR/set1/src/asg1_2/src/sequence_controller.cpp' has modification time 2134 s in the future
+[2.043s] gmake[2]: Warning: File '/home/man1/ASDfR/set1/src/asg1_2/src/imgsqcontrol.cpp' has modification time 2134 s in the future
+[2.055s] [ 16%] [32mBuilding CXX object CMakeFiles/relbot_controller.dir/src/1_2_3.cpp.o[0m
+[2.056s] [ 50%] [32mBuilding CXX object CMakeFiles/sequence_controller.dir/src/sequence_controller.cpp.o[0m
+[2.056s] [ 50%] [32mBuilding CXX object CMakeFiles/imgsqcontrol.dir/src/imgsqcontrol.cpp.o[0m
+[11.609s] [ 66%] [32m[1mLinking CXX executable sequence_controller[0m
+[12.439s] gmake[2]: warning:  Clock skew detected.  Your build may be incomplete.
+[12.474s] [ 66%] Built target sequence_controller
+[18.409s] [ 83%] [32m[1mLinking CXX executable imgsqcontrol[0m
+[19.392s] [100%] [32m[1mLinking CXX executable relbot_controller[0m
+[20.342s] gmake[2]: warning:  Clock skew detected.  Your build may be incomplete.
+[20.361s] [100%] Built target imgsqcontrol
+[20.670s] [100%] Built target relbot_controller
+[20.704s] Invoked command in '/home/man1/ASDfR/build/asg1_2' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake --build /home/man1/ASDfR/build/asg1_2 -- -j12 -l12
+[20.707s] Invoking command in '/home/man1/ASDfR/build/asg1_2': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake --install /home/man1/ASDfR/build/asg1_2
+[20.717s] -- Install configuration: ""
+[20.717s] -- Installing: /home/man1/ASDfR/install/asg1_2/lib/asg1_2/sequence_controller
+[20.720s] -- Set non-toolchain portion of runtime path of "/home/man1/ASDfR/install/asg1_2/lib/asg1_2/sequence_controller" to ""
+[20.720s] -- Installing: /home/man1/ASDfR/install/asg1_2/lib/asg1_2/imgsqcontrol
+[20.727s] -- Set non-toolchain portion of runtime path of "/home/man1/ASDfR/install/asg1_2/lib/asg1_2/imgsqcontrol" to ""
+[20.727s] -- Installing: /home/man1/ASDfR/install/asg1_2/lib/asg1_2/relbot_controller
+[20.733s] -- Set non-toolchain portion of runtime path of "/home/man1/ASDfR/install/asg1_2/lib/asg1_2/relbot_controller" to ""
+[20.733s] -- Installing: /home/man1/ASDfR/install/asg1_2/share/asg1_2/launch
+[20.734s] -- Installing: /home/man1/ASDfR/install/asg1_2/share/asg1_2/launch/start_relbot.launch.py
+[20.734s] -- Installing: /home/man1/ASDfR/install/asg1_2/share/ament_index/resource_index/package_run_dependencies/asg1_2
+[20.734s] -- Installing: /home/man1/ASDfR/install/asg1_2/share/ament_index/resource_index/parent_prefix_path/asg1_2
+[20.735s] -- Installing: /home/man1/ASDfR/install/asg1_2/share/asg1_2/environment/ament_prefix_path.sh
+[20.735s] -- Installing: /home/man1/ASDfR/install/asg1_2/share/asg1_2/environment/ament_prefix_path.dsv
+[20.735s] -- Installing: /home/man1/ASDfR/install/asg1_2/share/asg1_2/environment/path.sh
+[20.735s] -- Installing: /home/man1/ASDfR/install/asg1_2/share/asg1_2/environment/path.dsv
+[20.736s] -- Installing: /home/man1/ASDfR/install/asg1_2/share/asg1_2/local_setup.bash
+[20.736s] -- Installing: /home/man1/ASDfR/install/asg1_2/share/asg1_2/local_setup.sh
+[20.736s] -- Installing: /home/man1/ASDfR/install/asg1_2/share/asg1_2/local_setup.zsh
+[20.736s] -- Installing: /home/man1/ASDfR/install/asg1_2/share/asg1_2/local_setup.dsv
+[20.737s] -- Installing: /home/man1/ASDfR/install/asg1_2/share/asg1_2/package.dsv
+[20.737s] -- Installing: /home/man1/ASDfR/install/asg1_2/share/ament_index/resource_index/packages/asg1_2
+[20.737s] -- Installing: /home/man1/ASDfR/install/asg1_2/share/asg1_2/cmake/asg1_2Config.cmake
+[20.737s] -- Installing: /home/man1/ASDfR/install/asg1_2/share/asg1_2/cmake/asg1_2Config-version.cmake
+[20.738s] -- Installing: /home/man1/ASDfR/install/asg1_2/share/asg1_2/package.xml
+[20.741s] Invoked command in '/home/man1/ASDfR/build/asg1_2' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake --install /home/man1/ASDfR/build/asg1_2

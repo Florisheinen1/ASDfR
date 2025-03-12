@@ -1,0 +1,17 @@
+/home/man1/ASDfR/install/lightdetector/lib/lightdetector/lightdetector
+/home/man1/ASDfR/install/lightdetector/lib/lightdetector/lightprinter
+/home/man1/ASDfR/install/lightdetector/share/ament_index/resource_index/package_run_dependencies/lightdetector
+/home/man1/ASDfR/install/lightdetector/share/ament_index/resource_index/parent_prefix_path/lightdetector
+/home/man1/ASDfR/install/lightdetector/share/lightdetector/environment/ament_prefix_path.sh
+/home/man1/ASDfR/install/lightdetector/share/lightdetector/environment/ament_prefix_path.dsv
+/home/man1/ASDfR/install/lightdetector/share/lightdetector/environment/path.sh
+/home/man1/ASDfR/install/lightdetector/share/lightdetector/environment/path.dsv
+/home/man1/ASDfR/install/lightdetector/share/lightdetector/local_setup.bash
+/home/man1/ASDfR/install/lightdetector/share/lightdetector/local_setup.sh
+/home/man1/ASDfR/install/lightdetector/share/lightdetector/local_setup.zsh
+/home/man1/ASDfR/install/lightdetector/share/lightdetector/local_setup.dsv
+/home/man1/ASDfR/install/lightdetector/share/lightdetector/package.dsv
+/home/man1/ASDfR/install/lightdetector/share/ament_index/resource_index/packages/lightdetector
+/home/man1/ASDfR/install/lightdetector/share/lightdetector/cmake/lightdetectorConfig.cmake
+/home/man1/ASDfR/install/lightdetector/share/lightdetector/cmake/lightdetectorConfig-version.cmake
+/home/man1/ASDfR/install/lightdetector/share/lightdetector/package.xml

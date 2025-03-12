@@ -1,0 +1,72 @@
+[0.031s] Invoking command in '/home/man1/ASDfR/build/tracker': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake /home/man1/ASDfR/set1/src/tracker -DCMAKE_INSTALL_PREFIX=/home/man1/ASDfR/install/tracker
+[0.157s] -- The C compiler identification is GNU 13.3.0
+[0.276s] -- The CXX compiler identification is GNU 13.3.0
+[0.302s] -- Detecting C compiler ABI info
+[0.436s] -- Detecting C compiler ABI info - done
+[0.449s] -- Check for working C compiler: /usr/bin/cc - skipped
+[0.451s] -- Detecting C compile features
+[0.451s] -- Detecting C compile features - done
+[0.467s] -- Detecting CXX compiler ABI info
+[0.638s] -- Detecting CXX compiler ABI info - done
+[0.650s] -- Check for working CXX compiler: /usr/bin/c++ - skipped
+[0.650s] -- Detecting CXX compile features
+[0.651s] -- Detecting CXX compile features - done
+[0.670s] -- Found ament_cmake: 2.5.3 (/opt/ros/jazzy/share/ament_cmake/cmake)
+[0.911s] -- Found Python3: /usr/bin/python3 (found version "3.12.3") found components: Interpreter 
+[1.064s] -- Found rclcpp: 28.1.6 (/opt/ros/jazzy/share/rclcpp/cmake)
+[1.118s] -- Found rosidl_generator_c: 4.6.5 (/opt/ros/jazzy/share/rosidl_generator_c/cmake)
+[1.136s] -- Found rosidl_generator_cpp: 4.6.5 (/opt/ros/jazzy/share/rosidl_generator_cpp/cmake)
+[1.160s] -- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+[1.183s] -- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+[1.294s] -- Found rmw_implementation_cmake: 7.3.1 (/opt/ros/jazzy/share/rmw_implementation_cmake/cmake)
+[1.298s] -- Found rmw_fastrtps_cpp: 8.4.1 (/opt/ros/jazzy/share/rmw_fastrtps_cpp/cmake)
+[1.413s] -- Found OpenSSL: /usr/lib/x86_64-linux-gnu/libcrypto.so (found version "3.0.13")  
+[1.438s] -- Found FastRTPS: /opt/ros/jazzy/include (Required is at least version "2.13") 
+[1.466s] -- Using RMW implementation 'rmw_fastrtps_cpp' as default
+[1.561s] -- Found std_msgs: 5.3.5 (/opt/ros/jazzy/share/std_msgs/cmake)
+[1.581s] -- Found sensor_msgs: 5.3.5 (/opt/ros/jazzy/share/sensor_msgs/cmake)
+[1.774s] -- Configuring done (1.7s)
+[1.789s] -- Generating done (0.0s)
+[1.793s] -- Build files have been written to: /home/man1/ASDfR/build/tracker
+[1.814s] Invoked command in '/home/man1/ASDfR/build/tracker' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake /home/man1/ASDfR/set1/src/tracker -DCMAKE_INSTALL_PREFIX=/home/man1/ASDfR/install/tracker
+[1.816s] Invoking command in '/home/man1/ASDfR/build/tracker': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake --build /home/man1/ASDfR/build/tracker -- -j12 -l12
+[1.859s] -- Found ament_cmake: 2.5.3 (/opt/ros/jazzy/share/ament_cmake/cmake)
+[2.156s] -- Found rclcpp: 28.1.6 (/opt/ros/jazzy/share/rclcpp/cmake)
+[2.193s] -- Found rosidl_generator_c: 4.6.5 (/opt/ros/jazzy/share/rosidl_generator_c/cmake)
+[2.206s] -- Found rosidl_generator_cpp: 4.6.5 (/opt/ros/jazzy/share/rosidl_generator_cpp/cmake)
+[2.222s] -- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+[2.240s] -- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+[2.325s] -- Found rmw_implementation_cmake: 7.3.1 (/opt/ros/jazzy/share/rmw_implementation_cmake/cmake)
+[2.327s] -- Found rmw_fastrtps_cpp: 8.4.1 (/opt/ros/jazzy/share/rmw_fastrtps_cpp/cmake)
+[2.421s] -- Using RMW implementation 'rmw_fastrtps_cpp' as default
+[2.508s] -- Found std_msgs: 5.3.5 (/opt/ros/jazzy/share/std_msgs/cmake)
+[2.522s] -- Found sensor_msgs: 5.3.5 (/opt/ros/jazzy/share/sensor_msgs/cmake)
+[2.760s] -- Configuring done (0.9s)
+[2.780s] -- Generating done (0.0s)
+[2.786s] -- Build files have been written to: /home/man1/ASDfR/build/tracker
+[2.851s] gmake[2]: Warning: File '/home/man1/ASDfR/set1/src/tracker/src/tracker.cpp' has modification time 2133 s in the future
+[2.867s] [ 50%] [32mBuilding CXX object CMakeFiles/tracker.dir/src/tracker.cpp.o[0m
+[19.337s] [100%] [32m[1mLinking CXX executable tracker[0m
+[20.412s] gmake[2]: warning:  Clock skew detected.  Your build may be incomplete.
+[20.424s] [100%] Built target tracker
+[20.461s] Invoked command in '/home/man1/ASDfR/build/tracker' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake --build /home/man1/ASDfR/build/tracker -- -j12 -l12
+[20.463s] Invoking command in '/home/man1/ASDfR/build/tracker': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake --install /home/man1/ASDfR/build/tracker
+[20.475s] -- Install configuration: ""
+[20.475s] -- Installing: /home/man1/ASDfR/install/tracker/lib/tracker/tracker
+[20.482s] -- Set non-toolchain portion of runtime path of "/home/man1/ASDfR/install/tracker/lib/tracker/tracker" to ""
+[20.483s] -- Installing: /home/man1/ASDfR/install/tracker/share/ament_index/resource_index/package_run_dependencies/tracker
+[20.483s] -- Installing: /home/man1/ASDfR/install/tracker/share/ament_index/resource_index/parent_prefix_path/tracker
+[20.483s] -- Installing: /home/man1/ASDfR/install/tracker/share/tracker/environment/ament_prefix_path.sh
+[20.483s] -- Installing: /home/man1/ASDfR/install/tracker/share/tracker/environment/ament_prefix_path.dsv
+[20.484s] -- Installing: /home/man1/ASDfR/install/tracker/share/tracker/environment/path.sh
+[20.484s] -- Installing: /home/man1/ASDfR/install/tracker/share/tracker/environment/path.dsv
+[20.484s] -- Installing: /home/man1/ASDfR/install/tracker/share/tracker/local_setup.bash
+[20.485s] -- Installing: /home/man1/ASDfR/install/tracker/share/tracker/local_setup.sh
+[20.485s] -- Installing: /home/man1/ASDfR/install/tracker/share/tracker/local_setup.zsh
+[20.485s] -- Installing: /home/man1/ASDfR/install/tracker/share/tracker/local_setup.dsv
+[20.485s] -- Installing: /home/man1/ASDfR/install/tracker/share/tracker/package.dsv
+[20.486s] -- Installing: /home/man1/ASDfR/install/tracker/share/ament_index/resource_index/packages/tracker
+[20.486s] -- Installing: /home/man1/ASDfR/install/tracker/share/tracker/cmake/trackerConfig.cmake
+[20.486s] -- Installing: /home/man1/ASDfR/install/tracker/share/tracker/cmake/trackerConfig-version.cmake
+[20.487s] -- Installing: /home/man1/ASDfR/install/tracker/share/tracker/package.xml
+[20.491s] Invoked command in '/home/man1/ASDfR/build/tracker' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake --install /home/man1/ASDfR/build/tracker

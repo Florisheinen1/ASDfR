@@ -1,0 +1,97 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-.-04fefb0e5e8280c4044d.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.15"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4
+					]
+				}
+			],
+			"name" : "",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "asg1_2",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "asg1_2_uninstall::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-asg1_2_uninstall-863c4af251e363a1c4bb.json",
+					"name" : "asg1_2_uninstall",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "imgsqcontrol::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-imgsqcontrol-8f6a9f6454fbbf965df5.json",
+					"name" : "imgsqcontrol",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "relbot_controller::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-relbot_controller-d1ef756ebb37a584a7b1.json",
+					"name" : "relbot_controller",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "sequence_controller::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-sequence_controller-6cb701f020db5fcc2525.json",
+					"name" : "sequence_controller",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "uninstall::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-uninstall-dfa998a80bb93c1ce022.json",
+					"name" : "uninstall",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/man1/ASDfR/build/asg1_2",
+		"source" : "/home/man1/ASDfR/set1/src/asg1_2"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 6
+	}
+}

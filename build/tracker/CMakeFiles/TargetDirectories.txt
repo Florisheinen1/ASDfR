@@ -1,0 +1,10 @@
+/home/man1/ASDfR/build/tracker/CMakeFiles/uninstall.dir
+/home/man1/ASDfR/build/tracker/CMakeFiles/tracker_uninstall.dir
+/home/man1/ASDfR/build/tracker/CMakeFiles/tracker.dir
+/home/man1/ASDfR/build/tracker/CMakeFiles/test.dir
+/home/man1/ASDfR/build/tracker/CMakeFiles/edit_cache.dir
+/home/man1/ASDfR/build/tracker/CMakeFiles/rebuild_cache.dir
+/home/man1/ASDfR/build/tracker/CMakeFiles/list_install_components.dir
+/home/man1/ASDfR/build/tracker/CMakeFiles/install.dir
+/home/man1/ASDfR/build/tracker/CMakeFiles/install/local.dir
+/home/man1/ASDfR/build/tracker/CMakeFiles/install/strip.dir

@@ -1,0 +1,8 @@
+source;share/lightdetector/hook/cmake_prefix_path.ps1
+source;share/lightdetector/hook/cmake_prefix_path.dsv
+source;share/lightdetector/hook/cmake_prefix_path.sh
+source;share/lightdetector/local_setup.bash
+source;share/lightdetector/local_setup.dsv
+source;share/lightdetector/local_setup.ps1
+source;share/lightdetector/local_setup.sh
+source;share/lightdetector/local_setup.zsh
