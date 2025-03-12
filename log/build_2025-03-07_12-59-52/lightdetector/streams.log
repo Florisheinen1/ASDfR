@@ -1,0 +1,79 @@
+[0.025s] Invoking command in '/home/man1/ASDfR/build/lightdetector': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake /home/man1/ASDfR/set1/src/light_detector -DCMAKE_INSTALL_PREFIX=/home/man1/ASDfR/install/lightdetector
+[0.164s] -- The C compiler identification is GNU 13.3.0
+[0.284s] -- The CXX compiler identification is GNU 13.3.0
+[0.309s] -- Detecting C compiler ABI info
+[0.443s] -- Detecting C compiler ABI info - done
+[0.457s] -- Check for working C compiler: /usr/bin/cc - skipped
+[0.458s] -- Detecting C compile features
+[0.458s] -- Detecting C compile features - done
+[0.474s] -- Detecting CXX compiler ABI info
+[0.646s] -- Detecting CXX compiler ABI info - done
+[0.660s] -- Check for working CXX compiler: /usr/bin/c++ - skipped
+[0.661s] -- Detecting CXX compile features
+[0.661s] -- Detecting CXX compile features - done
+[0.677s] -- Found ament_cmake: 2.5.3 (/opt/ros/jazzy/share/ament_cmake/cmake)
+[0.911s] -- Found Python3: /usr/bin/python3 (found version "3.12.3") found components: Interpreter 
+[1.067s] -- Found rclcpp: 28.1.6 (/opt/ros/jazzy/share/rclcpp/cmake)
+[1.127s] -- Found rosidl_generator_c: 4.6.5 (/opt/ros/jazzy/share/rosidl_generator_c/cmake)
+[1.147s] -- Found rosidl_generator_cpp: 4.6.5 (/opt/ros/jazzy/share/rosidl_generator_cpp/cmake)
+[1.170s] -- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+[1.197s] -- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+[1.316s] -- Found rmw_implementation_cmake: 7.3.1 (/opt/ros/jazzy/share/rmw_implementation_cmake/cmake)
+[1.320s] -- Found rmw_fastrtps_cpp: 8.4.1 (/opt/ros/jazzy/share/rmw_fastrtps_cpp/cmake)
+[1.436s] -- Found OpenSSL: /usr/lib/x86_64-linux-gnu/libcrypto.so (found version "3.0.13")  
+[1.464s] -- Found FastRTPS: /opt/ros/jazzy/include (Required is at least version "2.13") 
+[1.495s] -- Using RMW implementation 'rmw_fastrtps_cpp' as default
+[1.579s] -- Found std_msgs: 5.3.5 (/opt/ros/jazzy/share/std_msgs/cmake)
+[1.601s] -- Found sensor_msgs: 5.3.5 (/opt/ros/jazzy/share/sensor_msgs/cmake)
+[1.808s] -- Configuring done (1.8s)
+[1.841s] -- Generating done (0.0s)
+[1.851s] -- Build files have been written to: /home/man1/ASDfR/build/lightdetector
+[1.877s] Invoked command in '/home/man1/ASDfR/build/lightdetector' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake /home/man1/ASDfR/set1/src/light_detector -DCMAKE_INSTALL_PREFIX=/home/man1/ASDfR/install/lightdetector
+[1.878s] Invoking command in '/home/man1/ASDfR/build/lightdetector': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake --build /home/man1/ASDfR/build/lightdetector -- -j12 -l12
+[1.914s] -- Found ament_cmake: 2.5.3 (/opt/ros/jazzy/share/ament_cmake/cmake)
+[2.229s] -- Found rclcpp: 28.1.6 (/opt/ros/jazzy/share/rclcpp/cmake)
+[2.257s] -- Found rosidl_generator_c: 4.6.5 (/opt/ros/jazzy/share/rosidl_generator_c/cmake)
+[2.266s] -- Found rosidl_generator_cpp: 4.6.5 (/opt/ros/jazzy/share/rosidl_generator_cpp/cmake)
+[2.278s] -- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+[2.291s] -- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+[2.360s] -- Found rmw_implementation_cmake: 7.3.1 (/opt/ros/jazzy/share/rmw_implementation_cmake/cmake)
+[2.361s] -- Found rmw_fastrtps_cpp: 8.4.1 (/opt/ros/jazzy/share/rmw_fastrtps_cpp/cmake)
+[2.466s] -- Using RMW implementation 'rmw_fastrtps_cpp' as default
+[2.576s] -- Found std_msgs: 5.3.5 (/opt/ros/jazzy/share/std_msgs/cmake)
+[2.597s] -- Found sensor_msgs: 5.3.5 (/opt/ros/jazzy/share/sensor_msgs/cmake)
+[2.858s] -- Configuring done (0.9s)
+[2.889s] -- Generating done (0.0s)
+[2.898s] -- Build files have been written to: /home/man1/ASDfR/build/lightdetector
+[2.971s] gmake[2]: Warning: File '/home/man1/ASDfR/set1/src/light_detector/src/lightdetector.cpp' has modification time 2133 s in the future
+[2.971s] gmake[2]: Warning: File '/home/man1/ASDfR/set1/src/light_detector/src/lightprinter.cpp' has modification time 2133 s in the future
+[2.987s] [ 25%] [32mBuilding CXX object CMakeFiles/lightprinter.dir/src/lightprinter.cpp.o[0m
+[2.992s] [ 50%] [32mBuilding CXX object CMakeFiles/lightdetector.dir/src/lightdetector.cpp.o[0m
+[18.000s] [ 75%] [32m[1mLinking CXX executable lightprinter[0m
+[19.551s] gmake[2]: warning:  Clock skew detected.  Your build may be incomplete.
+[19.573s] [100%] [32m[1mLinking CXX executable lightdetector[0m
+[19.580s] [100%] Built target lightprinter
+[20.586s] gmake[2]: warning:  Clock skew detected.  Your build may be incomplete.
+[20.598s] [100%] Built target lightdetector
+[20.633s] Invoked command in '/home/man1/ASDfR/build/lightdetector' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake --build /home/man1/ASDfR/build/lightdetector -- -j12 -l12
+[20.635s] Invoking command in '/home/man1/ASDfR/build/lightdetector': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake --install /home/man1/ASDfR/build/lightdetector
+[20.646s] -- Install configuration: ""
+[20.647s] -- Installing: /home/man1/ASDfR/install/lightdetector/lib/lightdetector/lightdetector
+[20.653s] -- Set non-toolchain portion of runtime path of "/home/man1/ASDfR/install/lightdetector/lib/lightdetector/lightdetector" to ""
+[20.653s] -- Installing: /home/man1/ASDfR/install/lightdetector/lib/lightdetector/lightprinter
+[20.660s] -- Set non-toolchain portion of runtime path of "/home/man1/ASDfR/install/lightdetector/lib/lightdetector/lightprinter" to ""
+[20.660s] -- Installing: /home/man1/ASDfR/install/lightdetector/share/ament_index/resource_index/package_run_dependencies/lightdetector
+[20.660s] -- Installing: /home/man1/ASDfR/install/lightdetector/share/ament_index/resource_index/parent_prefix_path/lightdetector
+[20.661s] -- Installing: /home/man1/ASDfR/install/lightdetector/share/lightdetector/environment/ament_prefix_path.sh
+[20.661s] -- Installing: /home/man1/ASDfR/install/lightdetector/share/lightdetector/environment/ament_prefix_path.dsv
+[20.661s] -- Installing: /home/man1/ASDfR/install/lightdetector/share/lightdetector/environment/path.sh
+[20.661s] -- Installing: /home/man1/ASDfR/install/lightdetector/share/lightdetector/environment/path.dsv
+[20.662s] -- Installing: /home/man1/ASDfR/install/lightdetector/share/lightdetector/local_setup.bash
+[20.662s] -- Installing: /home/man1/ASDfR/install/lightdetector/share/lightdetector/local_setup.sh
+[20.662s] -- Installing: /home/man1/ASDfR/install/lightdetector/share/lightdetector/local_setup.zsh
+[20.663s] -- Installing: /home/man1/ASDfR/install/lightdetector/share/lightdetector/local_setup.dsv
+[20.663s] -- Installing: /home/man1/ASDfR/install/lightdetector/share/lightdetector/package.dsv
+[20.663s] -- Installing: /home/man1/ASDfR/install/lightdetector/share/ament_index/resource_index/packages/lightdetector
+[20.663s] -- Installing: /home/man1/ASDfR/install/lightdetector/share/lightdetector/cmake/lightdetectorConfig.cmake
+[20.664s] -- Installing: /home/man1/ASDfR/install/lightdetector/share/lightdetector/cmake/lightdetectorConfig-version.cmake
+[20.664s] -- Installing: /home/man1/ASDfR/install/lightdetector/share/lightdetector/package.xml
+[20.667s] Invoked command in '/home/man1/ASDfR/build/lightdetector' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake --install /home/man1/ASDfR/build/lightdetector

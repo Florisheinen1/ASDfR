@@ -1,0 +1,79 @@
+[0.027s] Invoking command in '/home/man1/ASDfR/build/filterer': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake /home/man1/ASDfR/set1/src/filterer -DCMAKE_INSTALL_PREFIX=/home/man1/ASDfR/install/filterer
+[0.168s] -- The C compiler identification is GNU 13.3.0
+[0.289s] -- The CXX compiler identification is GNU 13.3.0
+[0.313s] -- Detecting C compiler ABI info
+[0.455s] -- Detecting C compiler ABI info - done
+[0.468s] -- Check for working C compiler: /usr/bin/cc - skipped
+[0.470s] -- Detecting C compile features
+[0.471s] -- Detecting C compile features - done
+[0.482s] -- Detecting CXX compiler ABI info
+[0.653s] -- Detecting CXX compiler ABI info - done
+[0.664s] -- Check for working CXX compiler: /usr/bin/c++ - skipped
+[0.664s] -- Detecting CXX compile features
+[0.665s] -- Detecting CXX compile features - done
+[0.682s] -- Found ament_cmake: 2.5.3 (/opt/ros/jazzy/share/ament_cmake/cmake)
+[0.910s] -- Found Python3: /usr/bin/python3 (found version "3.12.3") found components: Interpreter 
+[1.080s] -- Found rclcpp: 28.1.6 (/opt/ros/jazzy/share/rclcpp/cmake)
+[1.135s] -- Found rosidl_generator_c: 4.6.5 (/opt/ros/jazzy/share/rosidl_generator_c/cmake)
+[1.155s] -- Found rosidl_generator_cpp: 4.6.5 (/opt/ros/jazzy/share/rosidl_generator_cpp/cmake)
+[1.178s] -- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+[1.205s] -- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+[1.323s] -- Found rmw_implementation_cmake: 7.3.1 (/opt/ros/jazzy/share/rmw_implementation_cmake/cmake)
+[1.326s] -- Found rmw_fastrtps_cpp: 8.4.1 (/opt/ros/jazzy/share/rmw_fastrtps_cpp/cmake)
+[1.444s] -- Found OpenSSL: /usr/lib/x86_64-linux-gnu/libcrypto.so (found version "3.0.13")  
+[1.474s] -- Found FastRTPS: /opt/ros/jazzy/include (Required is at least version "2.13") 
+[1.499s] -- Using RMW implementation 'rmw_fastrtps_cpp' as default
+[1.581s] -- Found std_msgs: 5.3.5 (/opt/ros/jazzy/share/std_msgs/cmake)
+[1.597s] -- Found sensor_msgs: 5.3.5 (/opt/ros/jazzy/share/sensor_msgs/cmake)
+[1.786s] -- Configuring done (1.7s)
+[1.805s] -- Generating done (0.0s)
+[1.811s] -- Build files have been written to: /home/man1/ASDfR/build/filterer
+[1.838s] Invoked command in '/home/man1/ASDfR/build/filterer' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake /home/man1/ASDfR/set1/src/filterer -DCMAKE_INSTALL_PREFIX=/home/man1/ASDfR/install/filterer
+[1.840s] Invoking command in '/home/man1/ASDfR/build/filterer': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake --build /home/man1/ASDfR/build/filterer -- -j12 -l12
+[1.880s] -- Found ament_cmake: 2.5.3 (/opt/ros/jazzy/share/ament_cmake/cmake)
+[2.188s] -- Found rclcpp: 28.1.6 (/opt/ros/jazzy/share/rclcpp/cmake)
+[2.217s] -- Found rosidl_generator_c: 4.6.5 (/opt/ros/jazzy/share/rosidl_generator_c/cmake)
+[2.228s] -- Found rosidl_generator_cpp: 4.6.5 (/opt/ros/jazzy/share/rosidl_generator_cpp/cmake)
+[2.245s] -- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+[2.265s] -- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+[2.344s] -- Found rmw_implementation_cmake: 7.3.1 (/opt/ros/jazzy/share/rmw_implementation_cmake/cmake)
+[2.345s] -- Found rmw_fastrtps_cpp: 8.4.1 (/opt/ros/jazzy/share/rmw_fastrtps_cpp/cmake)
+[2.421s] -- Using RMW implementation 'rmw_fastrtps_cpp' as default
+[2.520s] -- Found std_msgs: 5.3.5 (/opt/ros/jazzy/share/std_msgs/cmake)
+[2.539s] -- Found sensor_msgs: 5.3.5 (/opt/ros/jazzy/share/sensor_msgs/cmake)
+[2.765s] -- Configuring done (0.9s)
+[2.789s] -- Generating done (0.0s)
+[2.797s] -- Build files have been written to: /home/man1/ASDfR/build/filterer
+[2.861s] gmake[2]: Warning: File '/home/man1/ASDfR/set1/src/filterer/src/greyscaler.cpp' has modification time 2133 s in the future
+[2.861s] gmake[2]: Warning: File '/home/man1/ASDfR/set1/src/filterer/src/masker.cpp' has modification time 2133 s in the future
+[2.875s] [ 25%] [32mBuilding CXX object CMakeFiles/greyscaler.dir/src/greyscaler.cpp.o[0m
+[2.876s] [ 50%] [32mBuilding CXX object CMakeFiles/masker.dir/src/masker.cpp.o[0m
+[18.167s] [ 75%] [32m[1mLinking CXX executable greyscaler[0m
+[18.385s] [100%] [32m[1mLinking CXX executable masker[0m
+[19.592s] gmake[2]: warning:  Clock skew detected.  Your build may be incomplete.
+[19.618s] [100%] Built target greyscaler
+[19.802s] gmake[2]: warning:  Clock skew detected.  Your build may be incomplete.
+[19.820s] [100%] Built target masker
+[19.921s] Invoked command in '/home/man1/ASDfR/build/filterer' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake --build /home/man1/ASDfR/build/filterer -- -j12 -l12
+[19.985s] Invoking command in '/home/man1/ASDfR/build/filterer': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake --install /home/man1/ASDfR/build/filterer
+[20.006s] -- Install configuration: ""
+[20.007s] -- Installing: /home/man1/ASDfR/install/filterer/lib/filterer/greyscaler
+[20.019s] -- Set non-toolchain portion of runtime path of "/home/man1/ASDfR/install/filterer/lib/filterer/greyscaler" to ""
+[20.019s] -- Installing: /home/man1/ASDfR/install/filterer/lib/filterer/masker
+[20.028s] -- Set non-toolchain portion of runtime path of "/home/man1/ASDfR/install/filterer/lib/filterer/masker" to ""
+[20.028s] -- Installing: /home/man1/ASDfR/install/filterer/share/ament_index/resource_index/package_run_dependencies/filterer
+[20.028s] -- Installing: /home/man1/ASDfR/install/filterer/share/ament_index/resource_index/parent_prefix_path/filterer
+[20.030s] -- Installing: /home/man1/ASDfR/install/filterer/share/filterer/environment/ament_prefix_path.sh
+[20.030s] -- Installing: /home/man1/ASDfR/install/filterer/share/filterer/environment/ament_prefix_path.dsv
+[20.031s] -- Installing: /home/man1/ASDfR/install/filterer/share/filterer/environment/path.sh
+[20.031s] -- Installing: /home/man1/ASDfR/install/filterer/share/filterer/environment/path.dsv
+[20.031s] -- Installing: /home/man1/ASDfR/install/filterer/share/filterer/local_setup.bash
+[20.031s] -- Installing: /home/man1/ASDfR/install/filterer/share/filterer/local_setup.sh
+[20.032s] -- Installing: /home/man1/ASDfR/install/filterer/share/filterer/local_setup.zsh
+[20.032s] -- Installing: /home/man1/ASDfR/install/filterer/share/filterer/local_setup.dsv
+[20.032s] -- Installing: /home/man1/ASDfR/install/filterer/share/filterer/package.dsv
+[20.033s] -- Installing: /home/man1/ASDfR/install/filterer/share/ament_index/resource_index/packages/filterer
+[20.033s] -- Installing: /home/man1/ASDfR/install/filterer/share/filterer/cmake/filtererConfig.cmake
+[20.033s] -- Installing: /home/man1/ASDfR/install/filterer/share/filterer/cmake/filtererConfig-version.cmake
+[20.033s] -- Installing: /home/man1/ASDfR/install/filterer/share/filterer/package.xml
+[20.047s] Invoked command in '/home/man1/ASDfR/build/filterer' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake --install /home/man1/ASDfR/build/filterer

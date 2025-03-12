@@ -1,0 +1,4 @@
+source;share/lightdetector/local_setup.bash
+source;share/lightdetector/local_setup.dsv
+source;share/lightdetector/local_setup.sh
+source;share/lightdetector/local_setup.zsh

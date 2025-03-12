@@ -1,0 +1,12 @@
+/home/man1/ASDfR/build/asg1_2/CMakeFiles/uninstall.dir
+/home/man1/ASDfR/build/asg1_2/CMakeFiles/asg1_2_uninstall.dir
+/home/man1/ASDfR/build/asg1_2/CMakeFiles/sequence_controller.dir
+/home/man1/ASDfR/build/asg1_2/CMakeFiles/imgsqcontrol.dir
+/home/man1/ASDfR/build/asg1_2/CMakeFiles/relbot_controller.dir
+/home/man1/ASDfR/build/asg1_2/CMakeFiles/test.dir
+/home/man1/ASDfR/build/asg1_2/CMakeFiles/edit_cache.dir
+/home/man1/ASDfR/build/asg1_2/CMakeFiles/rebuild_cache.dir
+/home/man1/ASDfR/build/asg1_2/CMakeFiles/list_install_components.dir
+/home/man1/ASDfR/build/asg1_2/CMakeFiles/install.dir
+/home/man1/ASDfR/build/asg1_2/CMakeFiles/install/local.dir
+/home/man1/ASDfR/build/asg1_2/CMakeFiles/install/strip.dir

@@ -1,0 +1,8 @@
+source;share/filterer/hook/cmake_prefix_path.ps1
+source;share/filterer/hook/cmake_prefix_path.dsv
+source;share/filterer/hook/cmake_prefix_path.sh
+source;share/filterer/local_setup.bash
+source;share/filterer/local_setup.dsv
+source;share/filterer/local_setup.ps1
+source;share/filterer/local_setup.sh
+source;share/filterer/local_setup.zsh

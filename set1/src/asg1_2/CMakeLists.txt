@@ -17,6 +17,7 @@ include_directories(include)
 # Add executables
 add_executable(sequence_controller src/sequence_controller.cpp)
 add_executable(imgsqcontrol src/imgsqcontrol.cpp)
+add_executable(relbot_controller src/1_2_3.cpp)  # Added new executable
 
 # Link dependencies for sequence_controller
 ament_target_dependencies(sequence_controller rclcpp geometry_msgs example_interfaces)
@@ -31,10 +32,21 @@ ament_target_dependencies(imgsqcontrol
   cv_bridge
 )
 
+# Link dependencies for relbot_controller
+ament_target_dependencies(relbot_controller 
+  rclcpp 
+  sensor_msgs 
+  geometry_msgs 
+  std_msgs 
+  OpenCV 
+  cv_bridge
+)
+
 # Install the executables
 install(TARGETS 
   sequence_controller
   imgsqcontrol
+  relbot_controller  # Added new executable
   DESTINATION lib/${PROJECT_NAME}
 )
 
