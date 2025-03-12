@@ -8,9 +8,11 @@
 #include <memory>
 #include <vector>
 #include <numeric>
+#include <string.h>
 
 #include <evl/thread.h>
 #include <evl/clock.h>
+#include <evl/evl.h>
 
 #define ONE_S_IN_NS 1000000000
 #define ONE_MS_IN_NS 1000000
@@ -48,9 +50,10 @@ bool isPrime(int number){
 }
 
 /// @brief Performs some random calculations (check is prime) to keep the CPU busy
+/// @param amount The amount of iterations to perform
 /// Supposed to take a fraction of 1 millisecond
-void do_random_calculations() {
-	for (int i = 0; i < 1000; i++) {
+void do_random_calculations(int amount) {
+	for (int i = 0; i < amount; i++) {
 		isPrime(i);
 	}
 }
@@ -89,8 +92,8 @@ double calculate_standard_deviation(int samples[], int n_samples, double mean) {
 /// @brief Performs time measurements
 /// @param n_measurements Amount of measurements to take
 /// @return The results
-std::unique_ptr<std::vector<int>> perform_measurements(int n_measurements) {
-	auto measurements = std::make_unique<std::vector<int>>();
+std::vector<int> perform_measurements(int n_measurements) {
+	auto measurements = std::vector<int>();
 
 	struct timespec start_measurement, expected_measurement, end_measurement;
 	
@@ -99,7 +102,7 @@ std::unique_ptr<std::vector<int>> perform_measurements(int n_measurements) {
 
 	for (int i = 0; i < n_measurements; i++) {
 
-		do_random_calculations();
+		do_random_calculations(100);
 
 		int result = clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &expected_measurement, NULL);
 		// Check if sleeping went correctly
@@ -113,7 +116,7 @@ std::unique_ptr<std::vector<int>> perform_measurements(int n_measurements) {
 		// Now, we can calculate how long it took exactly
 		int timediff = static_cast<int>(micros_between_timestamps(expected_measurement, end_measurement));
 		
-		measurements->push_back(timediff);
+		measurements.push_back(timediff);
 
 		// And update our next and last measurement timestamps
 		start_measurement = expected_measurement;
@@ -124,54 +127,64 @@ std::unique_ptr<std::vector<int>> perform_measurements(int n_measurements) {
 }
 
 // /// @brief Performs realtime time measurements
-// /// @param n_measurements Number of measurements to take
-// /// @return the measurements
-// std::unique_ptr<std::vector<int>> perform_evl_measurements(int n_measurements) {
-//     auto measurements = std::make_unique<std::vector<int>>();
+/// @param n_measurements Number of measurements to take
+/// @return the measurements
+std::vector<int> perform_evl_measurements(int n_measurements) {
+	auto measurements = std::vector<int>();
 
-//     struct timespec start_time, expected_time, end_time;
+	struct timespec start_time, expected_time, end_time;
 
-//     // Attach the thread to the EVL real-time core
-//     evl_attach_self("rt-measurements");
+	// Attach the thread to the EVL real-time core
+	auto efd = evl_attach_self("evl_thread");
+	if (efd < 0) {
+		evl_printf("Error: failed to attach thread: %s\n", strerror(-efd));
+		exit(0);
+	}
 
-//     // Read the current EVL clock time
-//     evl_read_clock(EVL_CLOCK_MONOTONIC, &start_time);
-//     expected_time = add_one_millisecond(start_time);
+	// If we are not in band, exit
+	if(!evl_is_inband()) {
+		evl_printf("Error: Not in band!");
+		exit(0);
+	}
 
-//     for (int i = 0; i < n_measurements; i++) {
-//         do_random_calculations();  // Simulate load
+	// Read the current EVL clock time
+	evl_read_clock(EVL_CLOCK_MONOTONIC, &start_time);
+	expected_time = add_one_millisecond(start_time);
 
-//         // Sleep until the expected timestamp
-//         int result = evl_sleep(&expected_time);
-//         if (result != 0) {
-//             perror("Error during evl_sleep");
-//             exit(EXIT_FAILURE);
-//         }
+	for (int i = 0; i < n_measurements; i++) {
+		do_random_calculations(100);  // Simulate load
 
-//         // Read actual wake-up time
-//         evl_read_clock(EVL_CLOCK_MONOTONIC, &end_time);
+		// Sleep until the expected timestamp
+		int result = evl_sleep_until(EVL_CLOCK_MONOTONIC, &expected_time);
+		if (result != 0) {
+			perror("Error during evl_sleep");
+			exit(EXIT_FAILURE);
+		}
 
-//         // Calculate the time difference
-//         int timediff = static_cast<int>(micros_between_timestamps(expected_time, end_time));
-//         measurements->push_back(timediff);
+		// Read actual wake-up time
+		evl_read_clock(EVL_CLOCK_MONOTONIC, &end_time);
 
-//         // Update timestamps for next cycle
-//         start_time = expected_time;
-//         expected_time = add_one_millisecond(start_time);
-//     }
+		// Calculate the time difference
+		int timediff = static_cast<int>(micros_between_timestamps(expected_time, end_time));
+		measurements.push_back(timediff);
 
-//     return measurements;
-// }
+		// Update timestamps for next cycle
+		start_time = expected_time;
+		expected_time = add_one_millisecond(start_time);
+	}
+
+	return measurements;
+}
 
 /// @brief Calculates the mean and standard deviation of given samples
 /// @param samples The samples
 /// @return The mean and standard deviation
-std::pair<double, double> calculate_stats(std::unique_ptr<std::vector<int>>& samples) {
-	size_t sample_size = samples->size();
+std::pair<double, double> calculate_stats(std::vector<int>& samples) {
+	size_t sample_size = samples.size();
 
-	double mean = std::accumulate(samples->begin(), samples->end(), 0.0) / sample_size;
+	double mean = std::accumulate(samples.begin(), samples.end(), 0.0) / sample_size;
 	
-	double variance = std::accumulate(samples->begin(), samples->end(), 0.0, 
+	double variance = std::accumulate(samples.begin(), samples.end(), 0.0, 
 		[mean](double sum, int value) {
 			return sum + (value - mean) * (value - mean);
 		}) / sample_size;
@@ -181,13 +194,43 @@ std::pair<double, double> calculate_stats(std::unique_ptr<std::vector<int>>& sam
 	return std::make_pair(mean, standard_deviation);
 }
 
+/// @brief Writes measurements
+/// @param measurements The measurements to write
+/// @param filename The filename to store it in
+/// @return Success
+bool write_measurements_to_file(std::vector<int>& measurements, std::string filename) {
+	std::ofstream file(filename);
+	if (!file) {
+		return false;
+	}
+	for (int measurement : measurements) {
+		file << measurement << "," << std::endl;
+	}
+	return true;
+}
+
 // Thread function to perform timed execution
-void* prog_thread(void* arg) {
+void* posix_thread(void* arg) {
 	auto measurements = perform_measurements(TOTAL_MEASUREMENTS);
 	
 	auto stats = calculate_stats(measurements);
 
 	printf("Mean: %f microseconds, std: %f microseconds\n", stats.first, stats.second);
+
+	write_measurements_to_file(measurements, "posix_results.csv");
+
+	return NULL;
+}
+
+// Thread function to perform timed execution
+void* evl_thread(void* arg) {
+	auto measurements = perform_evl_measurements(TOTAL_MEASUREMENTS);
+	
+	auto stats = calculate_stats(measurements);
+
+	evl_printf("Mean: %f microseconds, std: %f microseconds\n", stats.first, stats.second);
+
+	write_measurements_to_file(measurements, "evl_results.csv");
 
 	return NULL;
 }
@@ -195,14 +238,19 @@ void* prog_thread(void* arg) {
 int main() {
 	pthread_t thread_id;
 
+	printf("Starting posix benchmark\n");
 	// Create a POSIX thread
-	pthread_create(&thread_id, NULL, prog_thread, NULL);
+	pthread_create(&thread_id, NULL, posix_thread, NULL);
+	
+	// Wait for the thread to finish
+	pthread_join(thread_id, NULL);
+	
+	printf("Starting evl benchmark\n");
+	// Create EVL thread
+	pthread_create(&thread_id, NULL, evl_thread, NULL);
 
 	// Wait for the thread to finish
 	pthread_join(thread_id, NULL);
-
-	// Create EVL thread
-	// TODO: This
 
 	return 0;
 }
