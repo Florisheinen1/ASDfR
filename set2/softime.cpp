@@ -142,8 +142,8 @@ std::vector<int> perform_evl_measurements(int n_measurements) {
 	}
 
 	// If we are not in band, exit
-	if(!evl_is_inband()) {
-		evl_printf("Error: Not in band!");
+	if(evl_is_inband()) {
+		evl_printf("Error: Not out of band!");
 		exit(0);
 	}
 
@@ -236,21 +236,46 @@ void* evl_thread(void* arg) {
 }
 
 int main() {
-	pthread_t thread_id;
+	pthread_t posix_thread_id, evl_thread_id;
+	pthread_attr_t thread_attributes;
+	struct sched_param thread_schedule_parameters;
+	cpu_set_t cpuset;
+
+	// Set thread attributes
+	pthread_attr_init(&thread_attributes);
+	pthread_attr_setinheritsched(&thread_attributes, PTHREAD_EXPLICIT_SCHED);
+	pthread_attr_setschedpolicy(&thread_attributes, SCHED_FIFO);
+	// thread_schedule_parameters.sched_priority = 99; // Values usually range from 1 to 99 for real-time policies
+	pthread_attr_setschedparam(&thread_attributes, &thread_schedule_parameters);
+	CPU_ZERO(&cpuset);
+	CPU_SET(1, &cpuset);
 
 	printf("Starting posix benchmark\n");
 	// Create a POSIX thread
-	pthread_create(&thread_id, NULL, posix_thread, NULL);
+	pthread_create(&posix_thread_id, &thread_attributes, posix_thread, NULL);
+
+	// And set it's CPU affinity
+	if (pthread_setaffinity_np(posix_thread_id, sizeof(cpu_set_t), &cpuset) != 0) {
+		perror("Failed to set posix thread affinity");
+		exit(0);
+	}
 	
+	printf("\n");
+
 	// Wait for the thread to finish
-	pthread_join(thread_id, NULL);
+	pthread_join(posix_thread_id, NULL);
 	
 	printf("Starting evl benchmark\n");
 	// Create EVL thread
-	pthread_create(&thread_id, NULL, evl_thread, NULL);
+	pthread_create(&evl_thread_id, &thread_attributes, evl_thread, NULL);
+	// And set it's CPU affinity
+	if (pthread_setaffinity_np(evl_thread_id, sizeof(cpu_set_t), &cpuset) != 0) {
+		perror("Failed to set evl thread affinity");
+		exit(0);
+	}
 
 	// Wait for the thread to finish
-	pthread_join(thread_id, NULL);
+	pthread_join(evl_thread_id, NULL);
 
 	return 0;
 }
