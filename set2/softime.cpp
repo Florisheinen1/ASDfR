@@ -210,7 +210,7 @@ bool write_measurements_to_file(std::vector<int>& measurements, std::string file
 }
 
 // Thread function to perform timed execution
-void* posix_thread(void* arg) {
+void* posix_thread_function(void* arg) {
 	auto measurements = perform_measurements(TOTAL_MEASUREMENTS);
 	
 	auto stats = calculate_stats(measurements);
@@ -223,7 +223,7 @@ void* posix_thread(void* arg) {
 }
 
 // Thread function to perform timed execution
-void* evl_thread(void* arg) {
+void* evl_thread_function(void* arg) {
 	auto measurements = perform_evl_measurements(TOTAL_MEASUREMENTS);
 	
 	auto stats = calculate_stats(measurements);
@@ -245,29 +245,27 @@ int main() {
 	pthread_attr_init(&thread_attributes);
 	pthread_attr_setinheritsched(&thread_attributes, PTHREAD_EXPLICIT_SCHED);
 	pthread_attr_setschedpolicy(&thread_attributes, SCHED_FIFO);
-	thread_schedule_parameters.sched_priority = 99; // Values usually range from 1 to 99 for real-time policies
+	thread_schedule_parameters.sched_priority = 99;
 	pthread_attr_setschedparam(&thread_attributes, &thread_schedule_parameters);
 	CPU_ZERO(&cpuset);
 	CPU_SET(1, &cpuset);
 
 	printf("Starting posix benchmark\n");
 	// Create a POSIX thread
-	pthread_create(&posix_thread_id, &thread_attributes, posix_thread, NULL);
+	pthread_create(&posix_thread_id, &thread_attributes, posix_thread_function, NULL);
 
 	// And set it's CPU affinity
 	if (pthread_setaffinity_np(posix_thread_id, sizeof(cpu_set_t), &cpuset) != 0) {
 		perror("Failed to set posix thread affinity");
 		exit(0);
 	}
-	
-	printf("\n");
-
+		
 	// Wait for the thread to finish
 	pthread_join(posix_thread_id, NULL);
 	
-	printf("Starting evl benchmark\n");
+	printf("\nStarting evl benchmark\n");
 	// Create EVL thread
-	pthread_create(&evl_thread_id, &thread_attributes, evl_thread, NULL);
+	pthread_create(&evl_thread_id, &thread_attributes, evl_thread_function, NULL);
 	// And set it's CPU affinity
 	if (pthread_setaffinity_np(evl_thread_id, sizeof(cpu_set_t), &cpuset) != 0) {
 		perror("Failed to set evl thread affinity");
