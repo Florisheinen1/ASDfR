@@ -126,7 +126,7 @@ std::vector<int> perform_measurements(int n_measurements) {
 	return measurements;
 }
 
-// /// @brief Performs realtime time measurements
+/// @brief Performs realtime time measurements
 /// @param n_measurements Number of measurements to take
 /// @return the measurements
 std::vector<int> perform_evl_measurements(int n_measurements) {
