@@ -1,36 +1,58 @@
-#include "rclcpp/rclcpp.hpp"
-#include "std_msgs/msg/string.hpp"
-#include <chrono>
+#include "ros_time/Loop15.h"
 
-using namespace std::chrono;
-using std::placeholders::_1;
+Loop15::Loop15() : Node("loop15")
+{
+    // iniializing QoS parameters
+    this->declare_parameter<std::string>("reliability", "reliable");
+    this->declare_parameter<std::string>("history", "keep_last");
+    this->declare_parameter<std::string>("durability", "volatile");
+    this->declare_parameter<int>("depth", 10);
 
-class Loop15 : public rclcpp::Node {
-public:
-    Loop15() : Node("loop15") {
-        subscription_ = this->create_subscription<std_msgs::msg::String>(
-            "seq15_topic", 10, std::bind(&Loop15::message_callback, this, _1));
+    // Reading the QoS parameters
+    std::string reliability = this->get_parameter("reliability").as_string();
+    std::string history = this->get_parameter("history").as_string();
+    std::string durability = this->get_parameter("durability").as_string();
+    int depth = this->get_parameter("depth").as_int();
 
-        publisher_ = this->create_publisher<std_msgs::msg::String>("loop15_topic", 10);
+    // Printing the QoS settings
+    RCLCPP_INFO(this->get_logger(), "QoS: %s, %s, %s, depth=%d",
+                reliability.c_str(), history.c_str(), durability.c_str(), depth);
 
-        RCLCPP_INFO(this->get_logger(), "Loop15 node started.");
-    }
+    // Inputing the QoS parameters
+    rclcpp::QoS qos(depth);
+    if (history == "keep_all")
+        qos.keep_all();
+    else
+        qos.keep_last(depth); // defining the QoS using the library using if else by comparing the input
 
-private:
-    void message_callback(const std_msgs::msg::String::SharedPtr msg) {
-        RCLCPP_INFO(this->get_logger(), "Received: %s", msg->data.c_str());
+    if (reliability == "best_effort")
+        qos.best_effort();
+    else
+        qos.reliable();
 
-        auto response_msg = std_msgs::msg::String();
-        response_msg.data = msg->data; // Echo back the received message
+    if (durability == "transient_local")
+        qos.transient_local();
+    else
+        qos.durability_volatile();
 
-        publisher_->publish(response_msg);
-    }
+    // Creating subscriber and publisher by including the QoS
+    subscription_ = this->create_subscription<std_msgs::msg::String>(
+        "seq15_topic", qos, std::bind(&Loop15::callback, this, _1));
 
-    rclcpp::Publisher<std_msgs::msg::String>::SharedPtr publisher_;
-    rclcpp::Subscription<std_msgs::msg::String>::SharedPtr subscription_;
-};
+    publisher_ = this->create_publisher<std_msgs::msg::String>("loop15_topic", qos);
 
-int main(int argc, char *argv[]) {
+    // Output that node is created
+    RCLCPP_INFO(this->get_logger(), "Loop15 node started.");
+}
+
+// Called when message is received from subscriber (seq15_topic)
+void Loop15::callback(const std_msgs::msg::String::SharedPtr msg)
+{
+    publisher_->publish(*msg); // Publish the same message back
+}
+
+int main(int argc, char *argv[])
+{
     rclcpp::init(argc, argv);
     rclcpp::spin(std::make_shared<Loop15>());
     rclcpp::shutdown();

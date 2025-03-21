@@ -1,88 +1,99 @@
-#include "rclcpp/rclcpp.hpp"
-#include "std_msgs/msg/string.hpp"
-#include <chrono>
-#include <unordered_map>
-#include <sstream>
-#include <fstream>
+#include "ros_time/Seq15.h"
 
-using namespace std::chrono;
-using std::placeholders::_1;
+Seq15::Seq15() : Node("seq15"), last_sent_(0), prev_rtt_(0)
+{
+    // iniializing QoS parameters
+    this->declare_parameter<std::string>("reliability", "reliable");
+    this->declare_parameter<std::string>("history", "keep_last");
+    this->declare_parameter<std::string>("durability", "volatile");
+    this->declare_parameter<int>("depth", 10);
 
-class Seq15 : public rclcpp::Node {
-public:
-    Seq15() : Node("seq15"), message_id_(0) {
-        publisher_ = this->create_publisher<std_msgs::msg::String>("seq15_topic", 10);
-        subscription_ = this->create_subscription<std_msgs::msg::String>(
-            "loop15_topic", 10, std::bind(&Seq15::response_callback, this, _1));
+    // Reading the QoS parameters
+    std::string reliability = this->get_parameter("reliability").as_string();
+    std::string history = this->get_parameter("history").as_string();
+    std::string durability = this->get_parameter("durability").as_string();
+    int depth = this->get_parameter("depth").as_int();
 
-        timer_ = this->create_wall_timer(
-            milliseconds(1), std::bind(&Seq15::timer_callback, this));
+    // Printing the QoS settings
+    RCLCPP_INFO(this->get_logger(), "QoS: %s, %s, %s, depth=%d",
+                reliability.c_str(), history.c_str(), durability.c_str(), depth);
 
-        // Open CSV file for writing
-        csv_file_.open("timing_results.csv", std::ios::out | std::ios::trunc);
-        csv_file_ << "timestamp,rtt,jitter\n";  // CSV headers
+    // Inputing the QoS parameters
+    rclcpp::QoS qos(depth);
+    if (history == "keep_all")
+        qos.keep_all();
+    else
+        qos.keep_last(depth); // defining the QoS using the library using if else by comparing the input
+    if (reliability == "best_effort")
+        qos.best_effort();
+    else
+        qos.reliable();
+    if (durability == "transient_local")
+        qos.transient_local();
+    else
+        qos.durability_volatile();
 
-        RCLCPP_INFO(this->get_logger(), "Seq15 node started.");
+    // Creating publisher and subscriber by including the QoS
+    publisher_ = this->create_publisher<std_msgs::msg::String>("seq15_topic", qos);
+    subscription_ = this->create_subscription<std_msgs::msg::String>(
+        "loop15_topic", qos, std::bind(&Seq15::callback, this, _1));
+
+    // Setting a timer to run at every 1 kHz)
+    timer_ = this->create_wall_timer(milliseconds(1), std::bind(&Seq15::timer_callback, this)); // 1 kHz = 1 millisecond
+
+    // Intitializing CSV file to write the timestamp, rtt and jitter
+    log_file_.open("timing_results.csv", std::ios::out | std::ios::trunc);
+    log_file_ << "timestamp,rtt,jitter\n";
+    // Output that node is created
+    RCLCPP_INFO(this->get_logger(), "Seq15 node started.");
+}
+
+Seq15::~Seq15()
+{
+    if (log_file_.is_open())
+        log_file_.close(); // close file
+}
+
+// sends a message with the current timestamp
+void Seq15::timer_callback()
+{
+    auto now = steady_clock::now();
+    auto timestamp = duration_cast<nanoseconds>(now.time_since_epoch()).count();
+
+    auto msg = std_msgs::msg::String();
+    msg.data = std::to_string(timestamp); // timestamp is the unique identifier
+    publisher_->publish(msg);             // publish the msg
+
+    last_sent_ = timestamp; // store it to compare later
+}
+
+// Called when message is recived from subscriber ie loop15
+void Seq15::callback(const std_msgs::msg::String::SharedPtr msg)
+{
+    auto now = duration_cast<nanoseconds>(steady_clock::now().time_since_epoch()).count();
+
+    // Extract the original timestamp from the message data
+    long sent_time = std::stol(msg->data);
+
+    // Calculate round-trip time (ms)
+    double rtt = (now - sent_time) / 1e6;
+
+    // Calculate jitter as the change in RTT from last message
+    double jitter = std::abs(rtt - prev_rtt_);
+    prev_rtt_ = rtt;
+
+    // Write data in the CSV file
+    if (log_file_.is_open())
+    {
+        log_file_ << now << "," << rtt << "," << jitter << "\n";
     }
 
-    ~Seq15() {
-        if (csv_file_.is_open()) {
-            csv_file_.close();
-        }
-    }
+    // output in terminal
+    RCLCPP_INFO(this->get_logger(), "RTT: %.3f ms | Jitter: %.3f ms", rtt, jitter);
+}
 
-private:
-    void timer_callback() {
-        auto timestamp = duration_cast<nanoseconds>(steady_clock::now().time_since_epoch()).count();
-        std::ostringstream oss;
-        oss << message_id_ << "," << timestamp;
-        
-        auto msg = std_msgs::msg::String();
-        msg.data = oss.str();
-        
-        timestamps_[message_id_] = timestamp;
-        message_id_++;
-
-        RCLCPP_INFO(this->get_logger(), "Sent: %s", msg.data.c_str());
-        publisher_->publish(msg);
-    }
-
-    void response_callback(const std_msgs::msg::String::SharedPtr msg) {
-        auto receive_time = duration_cast<nanoseconds>(steady_clock::now().time_since_epoch()).count();
-        
-        // Extract message ID and sent timestamp
-        std::istringstream iss(msg->data);
-        int msg_id;
-        long sent_time;
-        char comma;
-        iss >> msg_id >> comma >> sent_time;
-
-        // Compute Round-Trip Time (RTT)
-        double round_trip_time = (receive_time - sent_time) / 1e6;  // Convert ns to ms
-        
-        // Compute jitter
-        static double prev_rtt = 0;
-        double jitter = abs(round_trip_time - prev_rtt);
-        prev_rtt = round_trip_time;
-
-        // Log results to CSV file
-        if (csv_file_.is_open()) {
-            csv_file_ << receive_time << "," << round_trip_time << "," << jitter << "\n";
-        }
-
-        RCLCPP_INFO(this->get_logger(), "RTT: %.3f ms, Jitter: %.3f ms", round_trip_time, jitter);
-        timestamps_.erase(msg_id);
-    }
-
-    rclcpp::Publisher<std_msgs::msg::String>::SharedPtr publisher_;
-    rclcpp::Subscription<std_msgs::msg::String>::SharedPtr subscription_;
-    rclcpp::TimerBase::SharedPtr timer_;
-    std::unordered_map<int, long> timestamps_;
-    int message_id_;
-    std::ofstream csv_file_;  // CSV file handle
-};
-
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
     rclcpp::init(argc, argv);
     rclcpp::spin(std::make_shared<Seq15>());
     rclcpp::shutdown();

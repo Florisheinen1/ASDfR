@@ -10,6 +10,9 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
 
+# Include directories
+include_directories(include)
+
 # Add executables
 add_executable(seq15 src/seq15.cpp)
 ament_target_dependencies(seq15 rclcpp std_msgs)
@@ -24,6 +27,10 @@ install(TARGETS
   DESTINATION lib/${PROJECT_NAME}
 )
 
+install(DIRECTORY
+  include/
+  DESTINATION include/)
+  
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
   # Skip linter checks for copyright/adding copyright and license to files
