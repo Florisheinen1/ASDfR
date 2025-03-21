@@ -1,11 +1,3 @@
-/// This document calculates the performance of EVL and standard Posix timer
-/// functions, by measuring for 5 seconds long the difference between the
-/// expected time of continuation after 1 millisecond and the actual time of
-/// continuation.
-///
-/// Authors: Floris Heinen & Manjunath Sakthivel
-/// Date: 2025-03-15
-
 #include "performance_timer.h"
 
 #include <stdio.h>
