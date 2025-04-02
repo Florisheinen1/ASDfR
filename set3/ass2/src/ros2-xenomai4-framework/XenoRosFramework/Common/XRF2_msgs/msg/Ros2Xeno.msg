@@ -1,2 +1,2 @@
-float64 example_a
-float64 example_b
+float64 left_wheel_speed
+float64 right_wheel_speed
