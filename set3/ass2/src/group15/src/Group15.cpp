@@ -2,7 +2,7 @@
 
 Group15::Group15(uint write_decimator_freq, uint monitor_freq) :
     XenoFrt20Sim(write_decimator_freq, monitor_freq, file, &data_to_be_logged),
-    file(1,"/home/pi/asdfr-15/logs","bin"), controller()
+    file(1,"/home/asdfr-15/logs/log","bin"), controller()
 {
      printf("%s: Constructing rampio\n", __FUNCTION__);
     // Add variables to logger to be logged, has to be done before you can log data
