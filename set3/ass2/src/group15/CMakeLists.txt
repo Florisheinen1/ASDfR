@@ -5,7 +5,7 @@ project(group15)
 
 add_compile_options(-Wno-pointer-arith)
 
-set(locationFramework "../XRF2/XenoRosFramework/")
+set(locationFramework "../ros2-xenomai4-framework/XenoRosFramework/")
 
 set(locationXenoSrc "${locationFramework}Xenomai/src/")
 set(locationXenoInclude "${locationFramework}Xenomai/include")
@@ -50,7 +50,7 @@ add_executable( group15 main.cpp
                 )
 
 # Add the constant TIME_STEP_SIZE to definitions
-target_compile_definitions(main PRIVATE TIME_STEP_SIZE=${TIME_STEP_SIZE_VALUE})
+target_compile_definitions(group15 PRIVATE TIME_STEP_SIZE=${TIME_STEP_SIZE_VALUE})
 
 ament_target_dependencies(group15 PUBLIC rclcpp xrf2_msgs std_msgs)
 
