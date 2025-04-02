@@ -26,7 +26,7 @@ int Group15::initialising()
     // Set physical and cyber system up for use in a 
     // Return 1 to go to initialised state
 
-    evl_printf("Hello from initialising\n");      // Do something
+    monitor.printf("Hello from initialising\n");      // Do something
 
     // The logger has to be initialised at only once
     logger.initialise();
@@ -41,7 +41,7 @@ int Group15::initialised()
     // Keep the physical syste in a state to be used in the run state
     // Call start() or return 1 to go to run state
 
-    evl_printf("Hello from initialised\n");       // Do something
+    monitor.printf("Hello from initialised\n");       // Do something
 
     return 0;
 }
@@ -79,7 +79,7 @@ int Group15::stopping()
     // Bring the physical system to a stop and set it in a state that the system can be deactivated
     // Return 1 to go to stopped state
     logger.stop();                                // Stop logger
-    evl_printf("Hello from stopping\n");          // Do something
+    monitor.printf("Hello from stopping\n");          // Do something
 
     return 1;
 }
@@ -97,7 +97,7 @@ int Group15::pausing()
 {
     // Bring the physical system to a stop as fast as possible without causing harm to the physical system
 
-    evl_printf("Hello from pausing\n");           // Do something
+    monitor.printf("Hello from pausing\n");           // Do something
     return 1 ;
 }
 
