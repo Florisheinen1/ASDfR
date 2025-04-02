@@ -1,8 +1,8 @@
-#include "Template20Sim.hpp"
+#include "Group15.hpp"
 
-Template20Sim::Template20Sim(uint write_decimator_freq, uint monitor_freq) :
-    XenoFrt20Sim(controller, write_decimator_freq, monitor_freq, file, &data_to_be_logged),
-    file(1,"/home/pi/workspace/template","bin")
+Group15::Group15(uint write_decimator_freq, uint monitor_freq) :
+    XenoFrt20Sim(write_decimator_freq, monitor_freq, file, &data_to_be_logged),
+    file(1,"/home/pi/asdfr-15/logs","bin"), controller()
 {
      printf("%s: Constructing rampio\n", __FUNCTION__);
     // Add variables to logger to be logged, has to be done before you can log data
@@ -13,15 +13,15 @@ Template20Sim::Template20Sim(uint write_decimator_freq, uint monitor_freq) :
     logger.addVariable("this_is_a_bool", boolean);
     
     // To infinite run the controller, uncomment line below
-    //controller.SetFinishTime(0.0);
+    controller.SetFinishTime(0.0);
 }
 
-Template20Sim::~Template20Sim()
+Group15::~Group15()
 {
     
 }
 
-int Template20Sim::initialising()
+int Group15::initialising()
 {
     // Set physical and cyber system up for use in a 
     // Return 1 to go to initialised state
@@ -36,7 +36,7 @@ int Template20Sim::initialising()
     return 1;
 }
 
-int Template20Sim::initialised()
+int Group15::initialised()
 {
     // Keep the physical syste in a state to be used in the run state
     // Call start() or return 1 to go to run state
@@ -46,7 +46,7 @@ int Template20Sim::initialised()
     return 0;
 }
 
-int Template20Sim::run()
+int Group15::run()
 {
     // Do what you need to do
     // Return 1 to go to stopping state
@@ -74,7 +74,7 @@ int Template20Sim::run()
     return 0;
 }
 
-int Template20Sim::stopping()
+int Group15::stopping()
 {
     // Bring the physical system to a stop and set it in a state that the system can be deactivated
     // Return 1 to go to stopped state
@@ -84,7 +84,7 @@ int Template20Sim::stopping()
     return 1;
 }
 
-int Template20Sim::stopped()
+int Group15::stopped()
 {
     // A steady state in which the system can be deactivated whitout harming the physical system
 
@@ -93,7 +93,7 @@ int Template20Sim::stopped()
     return 0;
 }
 
-int Template20Sim::pausing()
+int Group15::pausing()
 {
     // Bring the physical system to a stop as fast as possible without causing harm to the physical system
 
@@ -101,7 +101,7 @@ int Template20Sim::pausing()
     return 1 ;
 }
 
-int Template20Sim::paused()
+int Group15::paused()
 {
     // Keep the physical system in the current physical state
 
@@ -109,7 +109,7 @@ int Template20Sim::paused()
     return 0;
 }
 
-int Template20Sim::error()
+int Group15::error()
 {
     // Error detected in the system 
     // Can go to error if the previous state returns 1 from every other state function but initialising 

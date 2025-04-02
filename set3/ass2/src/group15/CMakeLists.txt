@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(template_20sim)
+project(group15)
 
 #set(CMAKE_CXX_STANDARD 11)
 
@@ -42,7 +42,7 @@ set(XENO  ${locationXenoSrc}FullStateMachine.cpp
           ${locationXenoSrc}XenoSpiControllerHandler.cpp
           ${locationXenoSrc}XenoFrt20Sim.cpp
 )
-add_executable( template_20sim main.cpp 
+add_executable( group15 main.cpp 
                 ${XENO}
                 ${SRC}
                 controller/LoopController.cpp
@@ -52,10 +52,10 @@ add_executable( template_20sim main.cpp
 # Add the constant TIME_STEP_SIZE to definitions
 target_compile_definitions(main PRIVATE TIME_STEP_SIZE=${TIME_STEP_SIZE_VALUE})
 
-ament_target_dependencies(template_20sim PUBLIC rclcpp xrf2_msgs std_msgs)
+ament_target_dependencies(group15 PUBLIC rclcpp xrf2_msgs std_msgs)
 
 # Specify paths to header files
-target_include_directories( template_20sim BEFORE PUBLIC 
+target_include_directories( group15 BEFORE PUBLIC 
                             /usr/evl/include 
                             include/ 
                             ${locationXenoInclude}
@@ -65,6 +65,6 @@ target_include_directories( template_20sim BEFORE PUBLIC
                             )
 
 # Specify paths to library files
-target_link_directories(template_20sim PUBLIC /usr/evl/lib)
+target_link_directories(group15 PUBLIC /usr/evl/lib)
 
-target_link_libraries(template_20sim PRIVATE evl)
+target_link_libraries(group15 PRIVATE evl)
