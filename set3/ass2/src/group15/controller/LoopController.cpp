@@ -5,11 +5,11 @@
  *  subm:  LoopController
  *  model: RELbotSimple
  *  expmt: RELbotSimple
- *  date:  March 23, 2024
- *  time:  12:46:30 PM
- *  user:  Universiteit Twente
+ *  date:  April 2, 2025
+ *  time:  3:44:01 PM
+ *  user:  Vakgroep RaM
  *  from:  -
- *  build: 5.1.0.12836
+ *  build: 5.1.4.13773
  **********************************************************/
 
 /* Standard include files */
@@ -32,8 +32,8 @@ void LoopController::CopyInputsToVariables (XXDouble *u)
 	/* copy the input vector to the input variables */
 	m_V[14] = u[0];		/* PosLeft */
 	m_V[15] = u[1];		/* PosRight */
-	m_V[16] = u[2];		/* SetPosLeft */
-	m_V[17] = u[3];		/* SetPosRight */
+	m_V[16] = u[2];		/* SetVelLeft */
+	m_V[17] = u[3];		/* SetVelRight */
 
 }
 
@@ -125,12 +125,12 @@ void LoopController::Initialize (XXDouble *u, XXDouble *y, XXDouble t)
 
 
 	/* set the parameters */
-	m_P[0] = 1.0;		/* PID_Left\Kp {} */
-	m_P[1] = 1.0;		/* PID_Left\Kd {} */
-	m_P[2] = 1.0;		/* PID_Left\Ki {} */
-	m_P[3] = 1.0;		/* PID_Right\Kp {} */
-	m_P[4] = 1.0;		/* PID_Right\Kd {} */
-	m_P[5] = 1.0;		/* PID_Right\Ki {} */
+	m_P[0] = 644.0;		/* PID_Left\Kp {} */
+	m_P[1] = 0.0;		/* PID_Left\Kd {} */
+	m_P[2] = 0.0;		/* PID_Left\Ki {} */
+	m_P[3] = 644.0;		/* PID_Right\Kp {} */
+	m_P[4] = 0.0;		/* PID_Right\Kd {} */
+	m_P[5] = 0.0;		/* PID_Right\Ki {} */
 
 
 	/* set the initial values */
@@ -284,10 +284,10 @@ void LoopController::CalculateDynamic (void)
 	/* PlusMinus\minus1 = PosRight; */
 	m_V[9] = m_V[15];
 
-	/* PlusMinus1\plus1 = SetPosLeft; */
+	/* PlusMinus1\plus1 = SetVelLeft; */
 	m_V[10] = m_V[16];
 
-	/* PlusMinus\plus1 = SetPosRight; */
+	/* PlusMinus\plus1 = SetVelRight; */
 	m_V[8] = m_V[17];
 
 	/* PID_Right\uI_state_dot = PlusMinus\plus1 - PlusMinus\minus1; */
