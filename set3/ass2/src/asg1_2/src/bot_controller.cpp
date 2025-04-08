@@ -1,64 +1,61 @@
 #include "rclcpp/rclcpp.hpp"
 #include "geometry_msgs/msg/point.hpp"
-#include "geometry_msgs/msg/pose2_d.hpp"
-#include <utility>
+#include "example_interfaces/msg/float64.hpp"
 #include <cmath>
 
 class BotController : public rclcpp::Node {
 public:
-    BotController() : Node("bot_controller"), x_relbot_{0.0, 0.0} {
+    BotController() : Node("bot_controller") {
         subscription_ = this->create_subscription<geometry_msgs::msg::Point>(
             "/trackpos", 10, std::bind(&BotController::point_callback, this, std::placeholders::_1));
 
-        setpoint_pub_ = this->create_publisher<geometry_msgs::msg::Pose2D>("/relbot/setpoint", 10);
+        left_wheel_pub_ = this->create_publisher<example_interfaces::msg::Float64>(
+            "/input/left_motor/setpoint_vel", 10);
+        right_wheel_pub_ = this->create_publisher<example_interfaces::msg::Float64>(
+            "/input/right_motor/setpoint_vel", 10);
 
-        RCLCPP_INFO(this->get_logger(), "bot_controller Node Started (Subscribed to /trackpos)");
+        RCLCPP_INFO(this->get_logger(), "bot_controller Node Started (No sensitivity scaling)");
     }
 
 private:
     rclcpp::Subscription<geometry_msgs::msg::Point>::SharedPtr subscription_;
-    rclcpp::Publisher<geometry_msgs::msg::Pose2D>::SharedPtr setpoint_pub_;
-    
-    double tau_ = 1.0;
-    double dt_ = 0.1;
-    std::pair<double, double> x_relbot_;  // (x, θz)
+    rclcpp::Publisher<example_interfaces::msg::Float64>::SharedPtr left_wheel_pub_;
+    rclcpp::Publisher<example_interfaces::msg::Float64>::SharedPtr right_wheel_pub_;
 
-    void point_callback(const geometry_msgs::msg::Point::SharedPtr point_msg) {
-        int x_pos = static_cast<int>(point_msg->x);
-        int y_pos = static_cast<int>(point_msg->y);
+    const double max_wheel_speed_ = 1.0;  // Maximum wheel speed in rad/s
 
-        if (x_pos == 0 && y_pos == 0) {
-            RCLCPP_WARN(this->get_logger(), "No green object detected. Skipping frame.");
+    void point_callback(const geometry_msgs::msg::Point::SharedPtr msg) {
+        int rel_x = static_cast<int>(msg->x);
+        int rel_y = static_cast<int>(msg->y);
+
+        if (rel_x == 0 && rel_y == 0) {
+            RCLCPP_WARN(this->get_logger(), "No object detected. Stopping.");
+            publish_wheel_velocities(0.0, 0.0);
             return;
         }
 
-        double x_light = static_cast<double>(x_pos);
-        double theta_light = compute_theta_from_x(x_pos);
+        // Directly use y as forward speed and x as turn adjust
+        double forward_speed = std::clamp(-static_cast<double>(rel_y), -max_wheel_speed_, max_wheel_speed_);
+        double turn_adjust = std::clamp(-static_cast<double>(rel_x), -max_wheel_speed_, max_wheel_speed_);
 
-        double x_error = x_light - x_relbot_.first;
-        double theta_error = theta_light - x_relbot_.second;
+        double left_speed = std::clamp(forward_speed + turn_adjust, -max_wheel_speed_, max_wheel_speed_);
+        double right_speed = std::clamp(forward_speed - turn_adjust, -max_wheel_speed_, max_wheel_speed_);
 
-        double x_set = x_relbot_.first + (dt_ / tau_) * x_error;
-        double theta_set = x_relbot_.second + (dt_ / tau_) * theta_error;
-
-        x_relbot_ = {x_set, theta_set};
-        publish_setpoint(x_set, theta_set);
-    }
-
-    void publish_setpoint(double x_set, double theta_set) {
-        auto pose_msg = geometry_msgs::msg::Pose2D();
-        pose_msg.x = x_set;
-        pose_msg.theta = theta_set;
-        setpoint_pub_->publish(pose_msg);
+        publish_wheel_velocities(left_speed, right_speed);
 
         RCLCPP_INFO(this->get_logger(),
-            "[PUBLISH] Setpoint → x: %.2f, θz: %.2f", x_set, theta_set);
+            "rel_x: %+4d, rel_y: %+4d | L: %.2f, R: %.2f",
+            rel_x, rel_y, left_speed, right_speed);
     }
 
-    /// Assume screen width spans [-π, π] from left to right for θ mapping
-    double compute_theta_from_x(int x_relative) const {
-        const double image_width_half = 640.0 / 2.0; // adjust if needed
-        return (x_relative / image_width_half) * M_PI;
+    void publish_wheel_velocities(double left, double right) {
+        example_interfaces::msg::Float64 left_msg;
+        example_interfaces::msg::Float64 right_msg;
+        left_msg.data = left;
+        right_msg.data = right;
+
+        left_wheel_pub_->publish(left_msg);
+        right_wheel_pub_->publish(right_msg);
     }
 };
 

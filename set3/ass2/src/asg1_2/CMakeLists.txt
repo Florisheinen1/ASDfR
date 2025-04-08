@@ -38,6 +38,7 @@ ament_target_dependencies(imgsqcontrol
 ament_target_dependencies(bot_controller 
   rclcpp 
   geometry_msgs
+  example_interfaces
 )
 
 # Install executables
