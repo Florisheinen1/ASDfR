@@ -30,4 +30,6 @@ if(BUILD_TESTING)
   ament_lint_auto_find_test_dependencies()
 endif()
 
+install(TARGETS wheel_tester DESTINATION lib/${PROJECT_NAME})
+
 ament_package()
