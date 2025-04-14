@@ -10,6 +10,7 @@ find_package(example_interfaces REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(OpenCV REQUIRED)
 find_package(cv_bridge REQUIRED)
+find_package(xrf2_msgs REQUIRED)
 
 # Include directories
 include_directories(include)
@@ -18,12 +19,19 @@ include_directories(include)
 add_executable(sequence_controller src/sequence_controller.cpp)
 add_executable(imgsqcontrol src/imgsqcontrol.cpp)
 add_executable(bot_controller src/bot_controller.cpp)
+add_executable(convert2xeno src/convert2xeno.cpp)
 
 # Link dependencies
 ament_target_dependencies(sequence_controller 
   rclcpp 
   geometry_msgs 
   example_interfaces
+)
+
+ament_target_dependencies(convert2xeno
+  rclcpp
+  example_interfaces
+  xrf2_msgs
 )
 
 ament_target_dependencies(imgsqcontrol 
@@ -46,8 +54,10 @@ install(TARGETS
   sequence_controller
   imgsqcontrol
   bot_controller
+  convert2xeno 
   DESTINATION lib/${PROJECT_NAME}
 )
+
 
 # Install launch directory
 install(DIRECTORY launch
