@@ -9,7 +9,7 @@ public:
 	{
 		publisher_ = this->create_publisher<xrf2_msgs::msg::Ros2Xeno>("Ros2Xeno", 10);
 		timer_ = this->create_wall_timer(
-			100ms, // check every 100ms for precise control
+			std::chrono::milliseconds(100),
 			std::bind(&WheelTester::publish_message, this)
 		);
 		start_time_ = now();
