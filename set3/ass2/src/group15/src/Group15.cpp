@@ -56,20 +56,19 @@ int Group15::run()
 
     controller.Calculate(u, y);
 
-	auto left_wheel_speed = this->ros_data.left_wheel_speed;
-	auto right_wheel_speed = this->ros_data.right_wheel_speed;
+	auto target_left_wheel_speed = this->ros_data.left_wheel_speed;
+	auto target_right_wheel_speed = this->ros_data.right_wheel_speed;
 
-	monitor.printf("Received left: %f, right: %f\n", left_wheel_speed, right_wheel_speed);
+	monitor.printf("Received left: %f, right: %f\n", target_left_wheel_speed, target_right_wheel_speed);
 	
 	auto enc1 = this->sample_data.channel1;
 	auto enc2 = this->sample_data.channel2;
 	auto enc3 = this->sample_data.channel3;
 	auto enc4 = this->sample_data.channel4;
-
-	monitor.printf("Enc 1: %d, %d, %d, %d \n", enc1, enc2, enc3, enc4);
-
-	actuate_data.pwm1 = 300;
-	actuate_data.pwm2 = 300;
+	monitor.printf("Encoders: %d, %d, %d, %d \n", enc1, enc2, enc3, enc4);
+	
+	actuate_data.pwm1 = target_left_wheel_speed;
+	actuate_data.pwm2 = target_right_wheel_speed;
 
 	if(controller.IsFinished())
         return 1;

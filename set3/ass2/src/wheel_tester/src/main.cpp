@@ -9,7 +9,7 @@ public:
     WheelTester()
     : Node("wheel_tester"), toggle_(false)
     {
-        publisher_ = this->create_publisher<xrf2_msgs::msg::Ros2Xeno>("wheel_tester", 10);
+        publisher_ = this->create_publisher<xrf2_msgs::msg::Ros2Xeno>("Ros2Xeno", 10);
         timer_ = this->create_wall_timer(
             std::chrono::seconds(5),
             std::bind(&WheelTester::publish_message, this)
@@ -22,11 +22,11 @@ private:
 		auto msg = xrf2_msgs::msg::Ros2Xeno();
 
         if (toggle_) {
-			msg.left_wheel_speed = 10.0;
+			msg.left_wheel_speed = 300.0;
 			msg.right_wheel_speed = 0.0;
 		} else {
 			msg.left_wheel_speed = 0.0;
-			msg.right_wheel_speed = 10.0;
+			msg.right_wheel_speed = 300.0;
 		}
         toggle_ = !toggle_;
 
