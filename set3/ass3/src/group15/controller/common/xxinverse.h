@@ -3,13 +3,13 @@
  *
  *  file:  common\xxinverse.h
  *  subm:  LoopController
- *  model: RELbotSimple
- *  expmt: RELbotSimple
- *  date:  March 23, 2024
- *  time:  12:46:30 PM
- *  user:  Universiteit Twente 
+ *  model: RELbotSimple (3)
+ *  expmt: RELbotSimple (3)
+ *  date:  April 14, 2025
+ *  time:  2:37:59 PM
+ *  user:  Vakgroep RaM 
  *  from:  -
- *  build: 5.1.0.12836
+ *  build: 5.1.4.13773
  **********************************************************/
 
 #ifndef XX_INVERSE_H

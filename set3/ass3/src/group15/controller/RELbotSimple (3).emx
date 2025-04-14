@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Document>
- <Model version="5.1" build="5.1.4.13773">
+ <Model version="5.1" build="5.1.1.12894">
   <Sidops><![CDATA[model 128 184
  description '<Information>
   <Description>
     <Version>5.1</Version>
     <IsMainModel>0</IsMainModel>
     <KeepParameterValues>False</KeepParameterValues>
-    <LibraryPath>C:\Users\manju\Downloads\RELbotSimple.emx</LibraryPath>
-    <TimeStamp>2025-4-2 15:46:30</TimeStamp>
+    <LibraryPath>X:\bnk\tCourses\A+SDfR+P2-23\RELbot\RELbotSimple.emx</LibraryPath>
+    <TimeStamp>2024-3-30 21:18:39</TimeStamp>
   </Description>
 </Information>';
  type Mainmodel
@@ -66,8 +66,8 @@
 // Theoretical PID controller
 parameters
 	real Kp = 644.0 {};	// Properional gain
-	real Kd = 0.0 {};	// Derivative gain
-	real Ki = 0.0 {};	// Integral gain
+	real Kd = 0.5 {};	// Derivative gain
+	real Ki = 3.9 {};	// Integral gain
 variables
 	real hidden uP, uD, uI;
 equations
@@ -96,8 +96,8 @@ equations
 // Theoretical PID controller
 parameters
 	real Kp = 644.0 {};	// Properional gain
-	real Kd = 0.0 {};	// Derivative gain
-	real Ki = 0.0 {};	// Integral gain
+	real Kd = 0.5 {};	// Derivative gain
+	real Ki = 3.9 {};	// Integral gain
 variables
 	real hidden uP, uD, uI;
 equations
@@ -144,6 +144,42 @@ equations
 equations
     output = sum (collect (plus)) - sum (collect (minus));
     implementation_end;
+      PosSPLeft 128 56
+       description '<Information><Description><Version>4.3</Version><IsMainModel>1</IsMainModel><KeepParameterValues>False</KeepParameterValues><LibraryPath>Signal\Block Diagram\Integrate.emx</LibraryPath><TimeStamp>2013-3-8 14:47:42</TimeStamp><AllowLibraryUpdate>True</AllowLibraryUpdate></Description></Information>';
+       type Integrate
+        ports
+         signal in input;
+         signal out output;
+       end;
+       icon bg bottom
+        figures
+         rectangle 112 40 144 72 color 0 fill 15132390;
+         text '∫' 128 56.3 color 16711680 'Lucida Sans' 21 italic;
+       end;
+       implementation eq
+parameters
+	real initial = 0;		// initial value
+equations
+	output = int (input, initial);
+     implementation_end;
+      PosSPRight 120 232
+       description '<Information><Description><Version>4.3</Version><IsMainModel>1</IsMainModel><KeepParameterValues>False</KeepParameterValues><LibraryPath>Signal\Block Diagram\Integrate.emx</LibraryPath><TimeStamp>2013-3-8 14:47:42</TimeStamp><AllowLibraryUpdate>True</AllowLibraryUpdate></Description></Information>';
+       type Integrate
+        ports
+         signal in input;
+         signal out output;
+       end;
+       icon bg bottom
+        figures
+         rectangle 104 216 136 248 color 0 fill 15132390;
+         text '∫' 120 232.3 color 16711680 'Lucida Sans' 21 italic;
+       end;
+       implementation eq
+parameters
+	real initial = 0;		// initial value
+equations
+	output = int (input, initial);
+     implementation_end;
      end;
      connections
       PID_Left\steering -> SteerLeft;
@@ -152,8 +188,10 @@ equations
       PlusMinus1\output -> PID_Left\error;
       PosLeft -> PlusMinus1\minus 208 128;
       PosRight -> PlusMinus\minus 208 304;
-      SetVelLeft -> PlusMinus1\plus;
-      SetVelRight -> PlusMinus\plus;
+      PosSPLeft\output -> PlusMinus1\plus;
+      PosSPRight\output -> PlusMinus\plus;
+      SetVelLeft -> PosSPLeft\input;
+      SetVelRight -> PosSPRight\input;
      end;
      figures
       text 'Remarks:
@@ -744,23 +782,14 @@ Assumptions:
  <ModelProperties>
   <ModelProperty section="CCodeDialog" entry="SubmodelName" value="LoopController"/>
   <ModelProperty section="CCodeDialog" entry="TargetName" value="C++ class for 20-sim submodel"/>
-  <ModelProperty section="CCodeDialog" entry="TargetDirectory" value="C:\Users\manju\Downloads"/>
+  <ModelProperty section="CCodeDialog" entry="TargetDirectory" value="X:\bnk\tCourses\A+SDfR+P2-23\RELbot\code"/>
  </ModelProperties>
- <RealTimeSyncTimeUs>1000</RealTimeSyncTimeUs>
  <Variables>
   <Parameters>
   </Parameters>
   <Initials>
    <Variable>
-    <Name>LoopController\PID_Left\error_dot_initial</Name>
-    <Value>0.0</Value>
-   </Variable>
-   <Variable>
     <Name>LoopController\PID_Left\uI_state_initial</Name>
-    <Value>0.0</Value>
-   </Variable>
-   <Variable>
-    <Name>LoopController\PID_Right\error_dot_initial</Name>
     <Value>0.0</Value>
    </Variable>
    <Variable>
@@ -780,10 +809,10 @@ Assumptions:
  <PlotSpecs>
   <VarNames>
    <VarName>time</VarName>
-   <VarName>LoopController\PosSPLeft\output</VarName>
-   <VarName>LoopController\PosSPRight\output</VarName>
    <VarName>LoopController\SetVelLeft</VarName>
    <VarName>LoopController\SetVelRight</VarName>
+   <VarName>LoopController\PosSPLeft\output</VarName>
+   <VarName>LoopController\PosSPRight\output</VarName>
    <VarName>LoopController\SteerLeft</VarName>
    <VarName>LoopController\SteerRight</VarName>
    <VarName>Plant\EncoderLeft</VarName>
@@ -793,7 +822,7 @@ Assumptions:
    <Plot>
     <PlotType>GraphPlot</PlotType>
     <BasePlot>
-     <PlotId>1</PlotId>
+     <PlotId>2</PlotId>
      <UseWindowsBGColor>false</UseWindowsBGColor>
      <BGColor>16777215</BGColor>
      <PlotIsVisible>true</PlotIsVisible>
@@ -870,8 +899,8 @@ Assumptions:
     </XAxes>
     <YAxes>
      <Axis>
-      <Minimum>-100.0</Minimum>
-      <Maximum>100.0</Maximum>
+      <Minimum>-2.0</Minimum>
+      <Maximum>3.0</Maximum>
       <Linear>true</Linear>
       <Scaling>2</Scaling>
       <Label>SetVelLeft</Label>
@@ -1096,14 +1125,14 @@ Assumptions:
     <Name>Left and Right</Name>
     <Tiling>2</Tiling>
     <PlotIds>
-     <PlotId>1</PlotId>
+     <PlotId>2</PlotId>
     </PlotIds>
     <ToggleState>Base</ToggleState>
    </PlotPanel>
   </PlotPanels>
-  <WindowRectangles virtualDesktopWidth="1536" virtualDesktopHeight="864">
-   <WindowRectangle monitor="0" left="0" top="0" right="1536" bottom="864" plotpanelid="1">
-0.0358073 0.00462963 0.507812 0.672454
+  <WindowRectangles virtualDesktopWidth="2056" virtualDesktopHeight="1286">
+   <WindowRectangle monitor="0" left="0" top="0" right="2056" bottom="1286" plotpanelid="1">
+0.0330739 0.00311042 0.5107 0.611198
    </WindowRectangle>
   </WindowRectangles>
  </PlotSpecs>
@@ -1315,6 +1344,9 @@ Assumptions:
  </ExportData>
  <BreakPoints>
  </BreakPoints>
+ <AnimationPlayback>
+  <PlaybackSpeed>1.0</PlaybackSpeed>
+ </AnimationPlayback>
 </ExpData>
   </Experiment>
 </Experiments>

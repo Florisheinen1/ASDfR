@@ -6,16 +6,16 @@ INPUTS & OUTPUTS INDICES
  
 *** INPUTS ***
 
-	m_V[14] = u[0];		/* PosLeft */
-	m_V[15] = u[1];		/* PosRight */
-	m_V[16] = u[2];		/* SetVelLeft */
-	m_V[17] = u[3];		/* SetVelRight */
+	m_V[12] = u[0];		/* PosLeft */
+	m_V[13] = u[1];		/* PosRight */
+	m_V[14] = u[2];		/* SetVelLeft */
+	m_V[15] = u[3];		/* SetVelRight */
 
  
 *** OUTPUTS ***
 
-	y[0] = 	m_V[12];		/* SteerLeft */
-	y[1] = 	m_V[13];		/* SteerRight */
+	y[0] = 	m_V[10];		/* SteerLeft */
+	y[1] = 	m_V[11];		/* SteerRight */
 
  
 
@@ -44,9 +44,7 @@ NAMES
 	"",
 	"",
 	"",
-	"PlusMinus\\plus1",
 	"PlusMinus\\minus1",
-	"PlusMinus1\\plus1",
 	"PlusMinus1\\minus1",
 	"SteerLeft",
 	"SteerRight",
@@ -54,16 +52,20 @@ NAMES
 	"PosRight",
 	"SetVelLeft",
 	"SetVelRight",
-	"PID_Left\\error_dot",
-	"PID_Right\\error_dot"
+	"PID_Left\\error_dot_in",
+	"PID_Right\\error_dot_in"
 
 [STATES]
 	"",
-	""
+	"",
+	"PosSPLeft\\output",
+	"PosSPRight\\output"
 
 [RATES]
 	"",
-	""
+	"",
+	"PosSPLeft\\input",
+	"PosSPRight\\input"
 
 [MATRICES]
 	NULL
