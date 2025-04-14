@@ -1,48 +1,85 @@
 #include "rclcpp/rclcpp.hpp"
 #include "xrf2_msgs/msg/ros2_xeno.hpp"
 
-using std::placeholders::_1;
-
 class WheelTester : public rclcpp::Node
 {
 public:
-    WheelTester()
-    : Node("wheel_tester"), toggle_(false)
-    {
-        publisher_ = this->create_publisher<xrf2_msgs::msg::Ros2Xeno>("Ros2Xeno", 10);
-        timer_ = this->create_wall_timer(
-            std::chrono::seconds(5),
-            std::bind(&WheelTester::publish_message, this)
-        );
-    }
+	WheelTester()
+	: Node("wheel_tester"), phase_(0)
+	{
+		publisher_ = this->create_publisher<xrf2_msgs::msg::Ros2Xeno>("Ros2Xeno", 10);
+		timer_ = this->create_wall_timer(
+			100ms, // check every 100ms for precise control
+			std::bind(&WheelTester::publish_message, this)
+		);
+		start_time_ = now();
+	}
 
 private:
-    void publish_message()
-    {
+	void publish_message()
+	{
+		auto now_time = now();
+		auto elapsed = now_time - start_time_;
 		auto msg = xrf2_msgs::msg::Ros2Xeno();
 
-        if (toggle_) {
-			msg.left_wheel_speed = 300.0;
-			msg.right_wheel_speed = 0.0;
-		} else {
-			msg.left_wheel_speed = 0.0;
-			msg.right_wheel_speed = 300.0;
+		switch (phase_) {
+			case 0: // Move straight for 2s
+				if (elapsed < rclcpp::Duration(2s)) {
+					msg.left_wheel_speed = -300.0;
+					msg.right_wheel_speed = 300.0;
+				} else {
+					phase_ = 1;
+					start_time_ = now_time;
+					return;
+				}
+				break;
+			case 1: // Rotate left for 1s
+				if (elapsed < rclcpp::Duration(1s)) {
+					msg.left_wheel_speed = 300.0;
+					msg.right_wheel_speed = 300.0;
+				} else {
+					phase_ = 2;
+					start_time_ = now_time;
+					return;
+				}
+				break;
+			case 2: // Rotate right for 1s
+				if (elapsed < rclcpp::Duration(1s)) {
+					msg.left_wheel_speed = -300.0;
+					msg.right_wheel_speed = -300.0;
+				} else {
+					phase_ = 3;
+					start_time_ = now_time;
+					return;
+				}
+				break;
+			case 3: // Halt
+				msg.left_wheel_speed = 0.0;
+				msg.right_wheel_speed = 0.0;
+				// You could optionally stop the timer here if you want
+				// timer_->cancel();
+				break;
 		}
-        toggle_ = !toggle_;
 
-        RCLCPP_INFO(this->get_logger(), "Publishing: left=%.1f, right=%.1f", msg.left_wheel_speed, msg.right_wheel_speed);
-        publisher_->publish(msg);
-    }
+		RCLCPP_INFO(
+			this->get_logger(), 
+			"Phase %d - Publishing: left=%.1f, right=%.1f", 
+			phase_, msg.left_wheel_speed, msg.right_wheel_speed
+		);
 
-    bool toggle_;
-    rclcpp::Publisher<xrf2_msgs::msg::Ros2Xeno>::SharedPtr publisher_;
-    rclcpp::TimerBase::SharedPtr timer_;
+		publisher_->publish(msg);
+	}
+
+	int phase_;
+	rclcpp::Time start_time_;
+	rclcpp::Publisher<xrf2_msgs::msg::Ros2Xeno>::SharedPtr publisher_;
+	rclcpp::TimerBase::SharedPtr timer_;
 };
 
 int main(int argc, char **argv)
 {
-    rclcpp::init(argc, argv);
-    rclcpp::spin(std::make_shared<WheelTester>());
-    rclcpp::shutdown();
-    return 0;
+	rclcpp::init(argc, argv);
+	rclcpp::spin(std::make_shared<WheelTester>());
+	rclcpp::shutdown();
+	return 0;
 }
