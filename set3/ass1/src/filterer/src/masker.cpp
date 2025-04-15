@@ -29,7 +29,6 @@ public:
 		{
 			auto masked = mask_image(colored);
 			publisher_->publish(*masked);
-			RCLCPP_INFO(this->get_logger(), "Masked image");
 		};
 
 		publisher_ = this->create_publisher<sensor_msgs::msg::Image>("/mask", 10);
