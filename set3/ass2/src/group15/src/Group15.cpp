@@ -16,8 +16,8 @@ Group15::Group15(uint write_decimator_freq, uint monitor_freq) : XenoFrt20Sim(wr
 
 	this->last_left_encoder_value = 0;
 	this->last_right_encoder_value = 0;
-	this->corrected_left_encoder_value;
-	this->corrected_right_encoder_value;
+	this->corrected_left_encoder_value = 0;
+	this->corrected_right_encoder_value = 0;
 }
 
 Group15::~Group15()
@@ -78,8 +78,11 @@ int Group15::run()
 	auto right_wheel_encoder = this->sample_data.channel1;
 	auto left_wheel_encoder = this->sample_data.channel2;
 
-	this->corrected_left_encoder_value = get_corrected_encoder_value_difference(left_wheel_encoder, this->last_left_encoder_value);
-	this->corrected_right_encoder_value = get_corrected_encoder_value_difference(right_wheel_encoder, this->last_right_encoder_value);
+	int corrected_left_diff = get_corrected_encoder_value_difference(left_wheel_encoder, this->last_left_encoder_value);
+	int corrected_right_diff = get_corrected_encoder_value_difference(right_wheel_encoder, this->last_right_encoder_value);
+
+	this->corrected_left_encoder_value += corrected_left_diff;
+	this->corrected_right_encoder_value += corrected_right_diff;
 
 	this->last_left_encoder_value = left_wheel_encoder;
 	this->last_right_encoder_value = right_wheel_encoder;
