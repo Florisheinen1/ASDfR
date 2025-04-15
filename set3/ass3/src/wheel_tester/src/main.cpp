@@ -2,6 +2,9 @@
 #include "xrf2_msgs/msg/ros2_xeno.hpp"
 #include <chrono>
 
+// For around 3cm/s
+#define RAD_PER_S 0.32
+
 class WheelTester : public rclcpp::Node
 {
 public:
@@ -32,7 +35,7 @@ public:
 		};
 
 		state_publisher_ = this->create_publisher<std_msgs::msg::Int32>("/Command", 10);
-		state_subscription_ = this->create_subscription<std_msgs::msg::Int32>("/XenoState", 10, xeno_state_callback);
+		state_subscription_ = this->create_subscription<std_msgs::msg::Int32>("/Xenomai_state", 10, xeno_state_callback);
 
 		action_subscription_ = this->create_subscription<std_msgs::msg::Empty>("/line_and_turn", 10, action_callback);
 
@@ -57,13 +60,13 @@ private:
 		{
 			if (elapsed_seconds < 5)
 			{
-				msg.left_wheel_speed = 40;
-				msg.right_wheel_speed = 40;
+				msg.left_wheel_speed = RAD_PER_S;
+				msg.right_wheel_speed = RAD_PER_S;
 			}
-			else if (elapsed_seconds < 10)
+			else if (elapsed_seconds < 16)
 			{
-				msg.left_wheel_speed = 40;
-				msg.right_wheel_speed = -40;
+				msg.left_wheel_speed = RAD_PER_S;
+				msg.right_wheel_speed = -RAD_PER_S;
 			}
 			else
 			{
