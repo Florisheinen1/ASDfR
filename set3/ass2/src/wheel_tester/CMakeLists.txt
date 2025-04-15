@@ -9,10 +9,11 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(xrf2_msgs REQUIRED)
 find_package(rclcpp REQUIRED)
+find_package(std_msgs REQUIRED)
 
 add_executable(wheel_tester src/main.cpp)
 
-ament_target_dependencies(wheel_tester xrf2_msgs rclcpp)
+ament_target_dependencies(wheel_tester xrf2_msgs rclcpp std_msgs)
 
 # uncomment the following section in order to fill in
 # further dependencies manually.
