@@ -46,6 +46,13 @@ int Group15::initialised()
     return 0;
 }
 
+/// @brief Converts the read encoder values to a sensible scale
+/// @param encoder_value 
+/// @return The sensible encoder value the plant expects
+int encoder_to_plant(int encoder_value) const {
+
+}
+
 int Group15::run()
 {
     // Do what you need to do
@@ -54,23 +61,27 @@ int Group15::run()
     // Start logger
     logger.start();
 
-    controller.Calculate(u, y);
-
 	auto target_left_wheel_speed = this->ros_data.left_wheel_speed;
 	auto target_right_wheel_speed = this->ros_data.right_wheel_speed;
-
-	// monitor.printf("Received left: %f, right: %f\n", target_left_wheel_speed, target_right_wheel_speed);
+    
+	auto right_encoder_value = this->sample_data.channel1;
+	auto left_encoder_value = this->sample_data.channel2;
 	
-	auto enc1 = this->sample_data.channel1;
-	auto enc2 = this->sample_data.channel2;
-	auto enc3 = this->sample_data.channel3;
-	auto enc4 = this->sample_data.channel4;
-	monitor.printf("Encoders: %d, %d, %d, %d \n", enc1, enc2, enc3, enc4);
+	u[0] = left_encoder_value;
+	u[1] = right_encoder_value;
+	u[2] = target_left_wheel_speed;
+	u[3] = target_right_wheel_speed;
 
-	evl_printf("Left: %d, Right: %d", enc1, enc2);
+	controller.Calculate(u, y);
+
+	auto plant_left_wheel_PWM = (int16_t) y[0];
+	auto plant_right_wheel_PWM = (int16_t) y[1];
+
+	// evl_printf("LeftENC: %d, RightENC: %d\n", left_encoder_value, right_encoder_value);
+	evl_printf("LeftPWM: %d, RightPWM: %d\n", plant_left_wheel_PWM, plant_right_wheel_PWM);
 	
-	this->actuate_data.pwm1 = target_left_wheel_speed;
-	this->actuate_data.pwm2 = target_right_wheel_speed;
+	this->actuate_data.pwm1 = -plant_right_wheel_PWM; // Negative for the inverted motor
+	this->actuate_data.pwm2 = plant_left_wheel_PWM;
 
 	if(controller.IsFinished())
         return 1;
