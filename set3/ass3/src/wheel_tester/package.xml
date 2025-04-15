@@ -3,8 +3,8 @@
 <package format="3">
   <name>wheel_tester</name>
   <version>0.0.0</version>
-  <description>Tests left and right wheel</description>
-  <maintainer email="asdfr-15@todo.todo">asdfr-15</maintainer>
+  <description>Drives robot in line and 90 deg corner</description>
+  <maintainer email="f.heinen@student.utwente.nl">Floris Heinen</maintainer>
   <license>MIT</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
