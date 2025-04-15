@@ -1,6 +1,7 @@
 #include "rclcpp/rclcpp.hpp"
 #include "xrf2_msgs/msg/ros2_xeno.hpp"
 #include "std_msgs/msg/int32.hpp"
+#include "std_msgs/msg/empty.hpp"
 #include <chrono>
 
 // For around 3cm/s
@@ -10,7 +11,7 @@ class WheelTester : public rclcpp::Node
 {
 public:
 	WheelTester()
-		: Node("wheel_tester"), phase_(0)
+		: Node("wheel_tester")
 	{
 
 		this->is_in_action = false;
