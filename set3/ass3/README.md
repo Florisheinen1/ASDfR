@@ -16,4 +16,4 @@ turn 90 degrees.
 	`ros2 launch launch/launch.py`
 
 	Initiate the driving:
-	`ros2 topic pub /line_and_turn std_msgs/msg/Empty "{}"`
+	`ros2 topic pub --once /line_and_turn std_msgs/msg/Empty "{}"`
