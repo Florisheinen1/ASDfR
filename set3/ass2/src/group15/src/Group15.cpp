@@ -115,8 +115,8 @@ int Group15::run()
 	controller.Calculate(u, y);
 
 	// Read the output
-	auto controlled_left_speed = std::clamp(u[0] * 5000, -40.0, 40.0);
-	auto controlled_right_speed = std::clamp(u[1] * 5000, -40.0, 40.0);
+	auto controlled_left_speed = std::clamp(y[0] * 50, -40.0, 40.0);
+	auto controlled_right_speed = std::clamp(y[1] * 50, -40.0, 40.0);
 
 	// And send the motor power
 	actuate_data.pwm1 = -controlled_right_speed; // TODO: Check if this needs a minus sign
@@ -131,6 +131,8 @@ int Group15::run()
 	evl_printf("Encoder left: %d, right: %d\n", this->corrected_left_encoder_value, this->corrected_right_encoder_value);
 	evl_printf("Angle left: %f, right: %f\n", left_wheel_radians, right_wheel_radians);
 	evl_printf("Power left: %f, right: %f\n", left_power_percentage, right_power_percentage);
+	evl_printf("Raw in left: %f, right: %f, left: %f, right%f\n", u[0], u[1], u[2], u[3]);
+	evl_printf("Raw out left: %f, right: %f\n", y[0], y[1]);
 	
 	if (controller.IsFinished())
 		return 1;
