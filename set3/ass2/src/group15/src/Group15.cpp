@@ -13,6 +13,8 @@ Group15::Group15(uint write_decimator_freq, uint monitor_freq) : XenoFrt20Sim(wr
 
 	// To infinite run the controller, uncomment line below
 	controller.SetFinishTime(0.0);
+
+	this->last_encoder_value = 0;
 }
 
 Group15::~Group15()
@@ -44,6 +46,23 @@ int Group15::initialised()
 	return 0;
 }
 
+int get_corrected_encoder_value_difference(int new_value, int old_value) {
+	int max_encoder_value = 16384;
+	int half_max_encoder_value = max_encoder_value / 2;
+
+	int raw_difference = new_value - old_value;
+	int corrected_difference = raw_difference;
+
+	// Correct difference
+	if (raw_difference > half_max_encoder_value) {
+		corrected_difference -= max_encoder_value;
+	} else if (raw_difference < -half_max_encoder_value) {
+		corrected_difference += max_encoder_value;
+	}
+
+	return corrected_difference;
+}
+
 int Group15::run()
 {
 	// Do what you need to do
@@ -52,6 +71,17 @@ int Group15::run()
 	// Start logger
 	logger.start();
 
+	// Fix encoder stuff
+	auto right_wheel_encoder = this->sample_data.channel1;
+	auto left_wheel_encoder = this->sample_data.channel2;
+
+	this->corrected_left_encoder_value = get_corrected_encoder_value_difference(left_wheel_encoder, this->last_left_encoder_value);
+	this->corrected_right_encoder_value = get_corrected_encoder_value_difference(right_wheel_encoder, this->last_right_encoder_value);
+
+	this->last_left_encoder_value = left_wheel_encoder;
+	this->last_right_encoder_value = right_wheel_encoder;
+
+
 	controller.Calculate(u, y);
 
 	auto target_left_wheel_speed = this->ros_data.left_wheel_speed;
@@ -59,14 +89,10 @@ int Group15::run()
 
 	monitor.printf("Received left: %f, right: %f\n", target_left_wheel_speed, target_right_wheel_speed);
 
-	auto enc1 = this->sample_data.channel1;
-	auto enc2 = this->sample_data.channel2;
-	auto enc3 = this->sample_data.channel3;
-	auto enc4 = this->sample_data.channel4;
-	evl_printf("Encoders: %d, %d, %d, %d \n", enc1, enc2, enc3, enc4);
+	evl_printf("Left enc: %d, right enc: %d\n", this->corrected_left_encoder_value, this->corrected_right_encoder_value);
 
-	actuate_data.pwm1 = target_left_wheel_speed;
-	actuate_data.pwm2 = target_right_wheel_speed;
+	// actuate_data.pwm1 = target_left_wheel_speed;
+	// actuate_data.pwm2 = target_right_wheel_speed;
 
 	if (controller.IsFinished())
 		return 1;

@@ -27,6 +27,12 @@ private:
 	struct ThisIsAStruct data_to_be_logged;
 	LoopController controller;
 
+	int last_left_encoder_value;
+	int last_right_encoder_value;
+	
+	int corrected_left_encoder_value;
+	int corrected_right_encoder_value;
+
 	double u[2];
 	double y[2];
 
