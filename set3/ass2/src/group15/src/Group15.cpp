@@ -63,7 +63,7 @@ int Group15::run()
 	auto enc2 = this->sample_data.channel2;
 	auto enc3 = this->sample_data.channel3;
 	auto enc4 = this->sample_data.channel4;
-	monitor.printf("Encoders: %d, %d, %d, %d \n", enc1, enc2, enc3, enc4);
+	evl_printf("Encoders: %d, %d, %d, %d \n", enc1, enc2, enc3, enc4);
 
 	actuate_data.pwm1 = target_left_wheel_speed;
 	actuate_data.pwm2 = target_right_wheel_speed;
