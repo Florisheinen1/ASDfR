@@ -1,5 +1,6 @@
 #include "rclcpp/rclcpp.hpp"
 #include "geometry_msgs/msg/point.hpp"
+#include "std_msgs/msg/int32.hpp"
 #include "xrf2_msgs/msg/ros2_xeno.hpp"
 #include <utility>
 #include <cmath>
@@ -14,6 +15,22 @@ public:
 	BotController() : Node("bot_controller")
 	{
 
+		auto xeno_state_callback = [this](std_msgs::msg::Int32::SharedPtr current_state) -> void
+		{
+			if (current_state->data == 3)
+			{
+				// Done initializing. Publish RUN command!
+				auto command = std_msgs::msg::Int32();
+				command.data = 2;
+				state_publisher_->publish(command);
+
+				RCLCPP_INFO(this->get_logger(), "Published START command");
+			}
+		};
+
+		state_publisher_ = this->create_publisher<std_msgs::msg::Int32>("/Command", 10);
+		state_subscription_ = this->create_subscription<std_msgs::msg::Int32>("/Xenomai_state", 10, xeno_state_callback);
+
 		subscription_ = this->create_subscription<geometry_msgs::msg::Point>(
 			"/trackpos", 10, std::bind(&BotController::point_callback, this, std::placeholders::_1));
 
@@ -25,6 +42,10 @@ public:
 private:
 	rclcpp::Subscription<geometry_msgs::msg::Point>::SharedPtr subscription_;
 	rclcpp::Publisher<xrf2_msgs::msg::Ros2Xeno>::SharedPtr setpoint_pub_; // TODO: Change this to Ros2Xeno
+
+	rclcpp::Publisher<std_msgs::msg::Int32>::SharedPtr state_publisher_;
+	rclcpp::Subscription<std_msgs::msg::Int32>::SharedPtr state_subscription_;
+
 
 	void point_callback(const geometry_msgs::msg::Point::SharedPtr point_msg)
 	{
