@@ -29,7 +29,7 @@ public:
 		publisher_ = this->create_publisher<xrf2_msgs::msg::Ros2Xeno>("Ros2Xeno", 10);
 
 		state_publisher_ = this->create_publisher<std_msgs::msg::Int32>("/Command", 10);
-		state_subscription_ = this->create_subscription<std_msgs::msg::Int32>("/XenoState", 10, xeno_state_callback);
+		state_subscription_ = this->create_subscription<std_msgs::msg::Int32>("/Xenomai_state", 10, xeno_state_callback);
 
 		timer_ = this->create_wall_timer(
 			std::chrono::seconds(5),
