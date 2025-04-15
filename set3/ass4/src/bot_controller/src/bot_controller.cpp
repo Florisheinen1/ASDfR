@@ -1,5 +1,6 @@
 #include "rclcpp/rclcpp.hpp"
 #include "geometry_msgs/msg/point.hpp"
+#include "xrf2_msgs/msg/ros2_xeno.hpp"
 #include <utility>
 #include <cmath>
 #include <algorithm>
@@ -16,14 +17,14 @@ public:
 		subscription_ = this->create_subscription<geometry_msgs::msg::Point>(
 			"/trackpos", 10, std::bind(&BotController::point_callback, this, std::placeholders::_1));
 
-		setpoint_pub_ = this->create_publisher<geometry_msgs::msg::Point>("/Ros2Xeno", 10);
+		setpoint_pub_ = this->create_publisher<xrf2_msgs::msg::Ros2Xeno>("/Ros2Xeno", 10);
 
 		RCLCPP_INFO(this->get_logger(), "bot_controller Node Started (Subscribed to /trackpos)");
 	}
 
 private:
 	rclcpp::Subscription<geometry_msgs::msg::Point>::SharedPtr subscription_;
-	rclcpp::Publisher<geometry_msgs::msg::Point>::SharedPtr setpoint_pub_; // TODO: Change this to Ros2Xeno
+	rclcpp::Publisher<xrf2_msgs::msg::Ros2Xeno>::SharedPtr setpoint_pub_; // TODO: Change this to Ros2Xeno
 
 	void point_callback(const geometry_msgs::msg::Point::SharedPtr point_msg)
 	{
@@ -47,9 +48,9 @@ private:
 
 	void publish_setpoint(double left_wheel_speed, double right_wheel_speed)
 	{
-		auto wheel_speeds = geometry_msgs::msg::Point();
-		wheel_speeds.x = left_wheel_speed;
-		wheel_speeds.y = right_wheel_speed;
+		auto wheel_speeds = xrf2_msgs::msg::Ros2Xeno();
+		wheel_speeds.left_wheel_speed = left_wheel_speed;
+		wheel_speeds.right_wheel_speed = right_wheel_speed;
 		setpoint_pub_->publish(wheel_speeds);
 
 		RCLCPP_INFO(this->get_logger(), "Left: %.2f, Right: %.2f", left_wheel_speed, right_wheel_speed);
