@@ -1,12 +1,13 @@
 #include "Group15.hpp"
 #include <math.h>
+#include <algorithm>
 
 #define MAX_ENCODER_VALUE 16384.0
 #define GEAR_RATIO 15.58
 #define FULL_CIRCLE_ENCODER (4.0 * 1024.0)
 
 Group15::Group15(uint write_decimator_freq, uint monitor_freq) : XenoFrt20Sim(write_decimator_freq, monitor_freq, file, &data_to_be_logged),
-																 file(1, "/home/asdfr-15/logs/log", "bin"), controller()
+															 file(1, "/home/asdfr-15/logs/log", "bin"), controller()
 {
 	printf("%s: Constructing rampio\n", __FUNCTION__);
 	// Add variables to logger to be logged, has to be done before you can log data
@@ -87,12 +88,15 @@ int Group15::run()
 	// Fix encoder wrapping
 	auto right_wheel_encoder = this->sample_data.channel1;
 	auto left_wheel_encoder = this->sample_data.channel2;
+
 	// Undo wrapping
 	int corrected_left_diff = get_corrected_encoder_value_difference(left_wheel_encoder, this->last_left_encoder_value);
 	int corrected_right_diff = get_corrected_encoder_value_difference(right_wheel_encoder, this->last_right_encoder_value);
+
 	// Calculate total amount of rotations in radians
 	this->corrected_left_encoder_value += corrected_left_diff;
 	this->corrected_right_encoder_value += corrected_right_diff;
+
 	// Update old encoder values
 	this->last_left_encoder_value = left_wheel_encoder;
 	this->last_right_encoder_value = right_wheel_encoder;
@@ -102,10 +106,11 @@ int Group15::run()
 	// And negate the right wheel for being inverted
 	auto right_wheel_radians = encoder_to_radians(-this->corrected_right_encoder_value);
 
+
 	auto target_left_wheel_speed = this->ros_data.left_wheel_speed;
 	auto target_right_wheel_speed = this->ros_data.right_wheel_speed;
 
-	// Set the PID controller input
+	// // Set the PID controller input
 	u[0] = left_wheel_radians;
 	u[1] = right_wheel_radians;
 	u[2] = target_left_wheel_speed;
@@ -113,23 +118,36 @@ int Group15::run()
 
 	controller.Calculate(u, y);
 
-	// Read the output
-	auto controlled_left_speed = u[0];
-	auto controlled_right_speed = u[1];
+	auto out_left = ((double) y[0]);
+        auto out_right = ((double) y[1]);
+	// // Read the output
+	// auto controlled_left_speed = std::clamp(y[0] * 50, -40.0, 40.0);
+	// auto controlled_right_speed = std::clamp(y[1] * 50, -40.0, 40.0);
 
-	// And send the motor power
-	actuate_data.pwm1 = controlled_right_speed; // TODO: Check if this needs a minus sign
-	actuate_data.pwm2 = controlled_left_speed;
+	auto max_radians_per_second = 468.0;
+	auto percentage_target_speed = target_left_wheel_speed / max_radians_per_second;
+	auto max_PWM_out = 2047.0;
+	auto new_out_left = percentage_target_speed * max_PWM_out * 100;
 
-	// For debugging only
-	double left_power_percentage = (controlled_left_speed / 2048.0) * 100.0;
-	double right_power_percentage = (controlled_right_speed / 2048.0) * 100.0;
+	evl_printf("Raw in left: %f, right: %f, left: %f, right%f\n", u[0], u[1], u[2], u[3]);
+	evl_printf("Supposedly left: %f\n", out_left);
+        evl_printf("Raw out left: %f, right: %f\n", new_out_left, 0.0);
+
+	// // And send the motor power
+	actuate_data.pwm1 = -out_right; // TODO: Check if this needs a minus sign
+	actuate_data.pwm2 = out_left;
+
+
+
+	// // For debugging only
+	// double left_power_percentage = (controlled_left_speed / 2048.0) * 100.0;
+	// double right_power_percentage = (controlled_right_speed / 2048.0) * 100.0;
 	
-	monitor.printf("Target speed: %f, %f\n", target_left_wheel_speed, target_right_wheel_speed);
+	// monitor.printf("Target speed: %f, %f\n", target_left_wheel_speed, target_right_wheel_speed);
 	
-	evl_printf("Encoder left: %d, right: %d\n", this->corrected_left_encoder_value, this->corrected_right_encoder_value);
-	evl_printf("Angle left: %f, right: %f\n", left_wheel_radians, right_wheel_radians);
-	evl_printf("Power left: %f, right: %f\n", left_power_percentage, right_power_percentage);
+	// evl_printf("Encoder left: %d, right: %d\n", this->corrected_left_encoder_value, this->corrected_right_encoder_value);
+	// evl_printf("Angle left: %f, right: %f\n", left_wheel_radians, right_wheel_radians);
+	// evl_printf("Power left: %f, right: %f\n", left_power_percentage, right_power_percentage);
 	
 	if (controller.IsFinished())
 		return 1;
