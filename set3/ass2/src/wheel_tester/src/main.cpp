@@ -42,23 +42,23 @@ private:
 	void publish_message()
 	{
 		auto msg = xrf2_msgs::msg::Ros2Xeno();
+		msg.left_wheel_speed = 0.0;
+		msg.right_wheel_speed = 0.0;
 
 		if (counter < 5) {
 			if (toggle_)
 			{
 				msg.left_wheel_speed = RAD_PER_S;
-				msg.right_wheel_speed = 0.0;
 			}
 			else
 			{
-				msg.left_wheel_speed = 0.0;
 				msg.right_wheel_speed = RAD_PER_S;
 			}
 			toggle_ = !toggle_;
 			counter++;
-		} else {
-			msg.left_wheel_speed = 0.0;
-			msg.right_wheel_speed = 0.0;
+		} else if (counter == 5) {
+			RCLCPP_INFO(this->get_logger(), "Stopped sending wheel speeds");
+			counter++;
 		}
 
 		RCLCPP_INFO(this->get_logger(), "Publishing: left=%.1f, right=%.1f", msg.left_wheel_speed, msg.right_wheel_speed);
