@@ -10,7 +10,7 @@ public:
 	WheelTester()
 		: Node("wheel_tester"), toggle_(false)
 	{
-
+		this->counter = 0;
 		auto xeno_state_callback = [this](std_msgs::msg::Int32::SharedPtr current_state) -> void
 		{
 			if (current_state->data == 3)
@@ -41,23 +41,30 @@ private:
 	{
 		auto msg = xrf2_msgs::msg::Ros2Xeno();
 
-		if (toggle_)
-		{
-			msg.left_wheel_speed = 300.0;
+		if (counter < 5) {
+			if (toggle_)
+			{
+				msg.left_wheel_speed = 300.0;
+				msg.right_wheel_speed = 0.0;
+			}
+			else
+			{
+				msg.left_wheel_speed = 0.0;
+				msg.right_wheel_speed = 300.0;
+			}
+			toggle_ = !toggle_;
+			counter++;
+		} else {
+			msg.left_wheel_speed = 0.0;
 			msg.right_wheel_speed = 0.0;
 		}
-		else
-		{
-			msg.left_wheel_speed = 0.0;
-			msg.right_wheel_speed = 300.0;
-		}
-		toggle_ = !toggle_;
 
 		RCLCPP_INFO(this->get_logger(), "Publishing: left=%.1f, right=%.1f", msg.left_wheel_speed, msg.right_wheel_speed);
 		publisher_->publish(msg);
 	}
 
 	bool toggle_;
+	int counter;
 	rclcpp::Publisher<xrf2_msgs::msg::Ros2Xeno>::SharedPtr publisher_;
 
 	rclcpp::Publisher<std_msgs::msg::Int32>::SharedPtr state_publisher_;
