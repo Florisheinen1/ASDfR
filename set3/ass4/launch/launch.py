@@ -14,18 +14,32 @@ def generate_launch_description():
 			name='ros_xeno_bridge',
 			output="screen",
 		),
-		# Run the wheel tester
-		Node(
-			package='wheel_tester',
-			executable='wheel_tester',
-			name='wheel_tester',
-			output="screen",
-		),
 		# Start initializing in the statemachine
 		ExecuteProcess(
 			cmd=[
 				"ros2", "topic", "pub", "--once", "/Command", "std_msgs/msg/Int32", "{data: 1}"
 			],
 			output="screen",
+		),
+		# Run the bot controller
+		Node(
+			package='bot_controller',
+			executable='bot_controller',
+			name='bot_controller',
+			output="screen",
+		),
+		# Subs /image and pubs green-masked image /mask
+		Node(
+			package='filterer',
+			executable='masker',
+			name='masker',
+			output='screen'
+		),
+		# Subs /mask and pubs center of gravity on /trackpos
+		Node(
+			package='tracker',
+			executable='tracker',
+			name='tracker',
+			output='screen'
 		),
 	])

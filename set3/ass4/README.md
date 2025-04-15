@@ -1,10 +1,7 @@
 Assignment 3 workspace
 
 Description:
-Contains our ros test node and the ros-xenomai framework,
-with our implementation of the states of the statemachine.
-Purpose: Make the robot drive in a straight line, and then
-turn 90 degrees.
+The entire ros xeno bot control stack.
 
 -----------------------------------------------
 1. Run
@@ -14,6 +11,3 @@ turn 90 degrees.
 
 	Launch the launch file:
 	`ros2 launch launch/launch.py`
-
-	Initiate the driving:
-	`ros2 topic pub --once /line_and_turn std_msgs/msg/Empty`
