@@ -3,9 +3,9 @@
 <package format="3">
   <name>filterer</name>
   <version>0.0.0</version>
-  <description>Converts colored image</description>
-  <maintainer email="rosuser@todo.todo">rosuser</maintainer>
-  <license>TODO: License declaration</license>
+  <description>Converts colored image, either to greyscale or mask</description>
+  <maintainer email="f.heinen@student.utwente.nl">Floris Heinen</maintainer>
+  <license>MIT</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
   <depend>rclcpp</depend>
