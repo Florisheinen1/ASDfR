@@ -115,8 +115,8 @@ int Group15::run()
 	controller.Calculate(u, y);
 
 	// Read the output
-	auto controlled_left_speed = std::clamp(u[0] * 5000, -40, 40);
-	auto controlled_right_speed = std::clamp(u[1] * 5000, -40, 40);
+	auto controlled_left_speed = std::clamp(u[0] * 5000, -40.0, 40.0);
+	auto controlled_right_speed = std::clamp(u[1] * 5000, -40.0, 40.0);
 
 	// And send the motor power
 	actuate_data.pwm1 = -controlled_right_speed; // TODO: Check if this needs a minus sign
