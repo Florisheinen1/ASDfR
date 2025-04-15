@@ -21,12 +21,17 @@ public:
 
 		this->declare_parameter("image_topic", "/image");
 
+		this->minimum_green_to_red = this->get_parameter("minimum_green_to_red").as_double();
+		this->minimum_green_to_blue = this->get_parameter("minimum_green_to_blue").as_double();
+		this->minimum_brightness = this->get_parameter("minimum_brightness").as_int();
+
 		this->resulting_image = std::make_shared<sensor_msgs::msg::Image>();
 
 		auto topic_callback = [this](sensor_msgs::msg::Image::SharedPtr colored) -> void
 		{
 			auto masked = mask_image(colored);
 			publisher_->publish(*masked);
+			RCLCPP_INFO(this->get_logger(), "Masked image");
 		};
 
 		publisher_ = this->create_publisher<sensor_msgs::msg::Image>("/mask", 10);
@@ -39,7 +44,9 @@ private:
 	rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr subscription_;
 	rclcpp::Publisher<sensor_msgs::msg::Image>::SharedPtr publisher_;
 
-	sensor_msgs::msg::Image::SharedPtr resulting_image;
+	double minimum_green_to_red;
+	double minimum_green_to_blue;
+	uint8_t minimum_brightness;
 
 	/// @brief Will return a greyscale pixel value that represents if this pixel is green
 	/// @param red The red value of current pixel
@@ -48,11 +55,6 @@ private:
 	/// @return How much this pixel is green
 	uint8_t is_pixel_green(uint8_t red, uint8_t green, uint8_t blue) const
 	{
-
-		double minimum_green_to_red = this->get_parameter("minimum_green_to_red").as_double();
-		double minimum_green_to_blue = this->get_parameter("minimum_green_to_blue").as_double();
-		uint8_t minimum_brightness = this->get_parameter("minimum_brightness").as_int();
-
 		uint8_t brightness = this->get_luminance_of_pixel(red, green, blue);
 		if (brightness < minimum_brightness)
 		{
@@ -95,16 +97,18 @@ private:
 	/// @return A green-masked image
 	sensor_msgs::msg::Image::SharedPtr mask_image(const sensor_msgs::msg::Image::SharedPtr rgb8_image) const
 	{
-		this->resulting_image->header = rgb8_image->header;
-		this->resulting_image->height = rgb8_image->height;
-		this->resulting_image->width = rgb8_image->width;
-		this->resulting_image->encoding = "mono8";
-		this->resulting_image->is_bigendian = rgb8_image->is_bigendian;
-		this->resulting_image->step = rgb8_image->width;
+		auto resulting_image = std::make_shared<sensor_msgs::msg::Image>();
 
-		int total_pixels = this->resulting_image->width * this->resulting_image->height;
+		resulting_image->header = rgb8_image->header;
+		resulting_image->height = rgb8_image->height;
+		resulting_image->width = rgb8_image->width;
+		resulting_image->encoding = "mono8";
+		resulting_image->is_bigendian = rgb8_image->is_bigendian;
+		resulting_image->step = rgb8_image->width;
 
-		mono->data.resize(total_pixels);
+		int total_pixels = resulting_image->width * resulting_image->height;
+
+		resulting_image->data.resize(total_pixels);
 
 		for (int i = 0; i < total_pixels; i++)
 		{
@@ -114,10 +118,10 @@ private:
 			uint8_t blue = rgb8_image->data[rgb8_index + 2];
 
 			uint8_t luminance = this->is_pixel_green(red, green, blue);
-			this->resulting_image->data[i] = luminance;
+			resulting_image->data[i] = luminance;
 		}
 
-		return this->resulting_image;
+		return resulting_image;
 	}
 };
 
