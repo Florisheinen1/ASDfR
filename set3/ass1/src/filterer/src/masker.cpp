@@ -25,8 +25,6 @@ public:
 		this->minimum_green_to_blue = this->get_parameter("minimum_green_to_blue").as_double();
 		this->minimum_brightness = this->get_parameter("minimum_brightness").as_int();
 
-		this->resulting_image = std::make_shared<sensor_msgs::msg::Image>();
-
 		auto topic_callback = [this](sensor_msgs::msg::Image::SharedPtr colored) -> void
 		{
 			auto masked = mask_image(colored);
