@@ -6,43 +6,73 @@ using std::placeholders::_1;
 class WheelTester : public rclcpp::Node
 {
 public:
-    WheelTester()
-    : Node("wheel_tester"), toggle_(false)
-    {
-        publisher_ = this->create_publisher<xrf2_msgs::msg::Ros2Xeno>("Ros2Xeno", 10);
-        timer_ = this->create_wall_timer(
-            std::chrono::seconds(5),
-            std::bind(&WheelTester::publish_message, this)
-        );
-    }
+	WheelTester()
+		: Node("wheel_tester"), toggle_(false)
+	{
+
+		this->statemachine_state = 0;
+
+		auto xeno_state_callback = [this](std_msgs::msg::Int32::SharedPtr current_state) -> void
+		{
+			statemachine_state = current_state.data;
+
+			if (statemachine_state == 3)
+			{
+				// Done initializing. Publish RUN command!
+
+				auto command = std_msgs::msg::Int32();
+				command.data = 2;
+
+				state_publisher_.publish(command);
+
+				RCLCPP_INFO(this->get_logger(), "Published START command");
+			}
+		};
+
+		publisher_ = this->create_publisher<xrf2_msgs::msg::Ros2Xeno>("Ros2Xeno", 10);
+
+		state_publisher_ = this->create_publisher<std_msgs::msg::Int32>("/Command", 10);
+		state_subscription_ = this->create_subscription<std_msgs::msg::Int32>("/XenoState", 10, xeno_state_callback);
+
+		timer_ = this->create_wall_timer(
+			std::chrono::seconds(5),
+			std::bind(&WheelTester::publish_message, this));
+	}
 
 private:
-    void publish_message()
-    {
+	void publish_message()
+	{
 		auto msg = xrf2_msgs::msg::Ros2Xeno();
 
-        if (toggle_) {
+		if (toggle_)
+		{
 			msg.left_wheel_speed = 300.0;
 			msg.right_wheel_speed = 0.0;
-		} else {
+		}
+		else
+		{
 			msg.left_wheel_speed = 0.0;
 			msg.right_wheel_speed = 300.0;
 		}
-        toggle_ = !toggle_;
+		toggle_ = !toggle_;
 
-        RCLCPP_INFO(this->get_logger(), "Publishing: left=%.1f, right=%.1f", msg.left_wheel_speed, msg.right_wheel_speed);
-        publisher_->publish(msg);
-    }
+		RCLCPP_INFO(this->get_logger(), "Publishing: left=%.1f, right=%.1f", msg.left_wheel_speed, msg.right_wheel_speed);
+		publisher_->publish(msg);
+	}
 
-    bool toggle_;
-    rclcpp::Publisher<xrf2_msgs::msg::Ros2Xeno>::SharedPtr publisher_;
-    rclcpp::TimerBase::SharedPtr timer_;
+	bool toggle_;
+	int statemachine_state;
+	rclcpp::Publisher<xrf2_msgs::msg::Ros2Xeno>::SharedPtr publisher_;
+
+	rclcpp::Publisher<std_msgs::msg::Int32>::SharedPtr state_publisher_;
+	rclcpp::Subscription<std_msgs::msg::Int32>::SharedPtr state_subscription_;
+	rclcpp::TimerBase::SharedPtr timer_;
 };
 
 int main(int argc, char **argv)
 {
-    rclcpp::init(argc, argv);
-    rclcpp::spin(std::make_shared<WheelTester>());
-    rclcpp::shutdown();
-    return 0;
+	rclcpp::init(argc, argv);
+	rclcpp::spin(std::make_shared<WheelTester>());
+	rclcpp::shutdown();
+	return 0;
 }
