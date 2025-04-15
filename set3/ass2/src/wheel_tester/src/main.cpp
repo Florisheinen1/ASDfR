@@ -13,14 +13,14 @@ public:
 
 		auto xeno_state_callback = [this](std_msgs::msg::Int32::SharedPtr current_state) -> void
 		{
-			if (current_state.data == 3)
+			if (current_state->data == 3)
 			{
 				// Done initializing. Publish RUN command!
 
 				auto command = std_msgs::msg::Int32();
 				command.data = 2;
 
-				state_publisher_.publish(command);
+				state_publisher_->publish(command);
 
 				RCLCPP_INFO(this->get_logger(), "Published START command");
 			}
