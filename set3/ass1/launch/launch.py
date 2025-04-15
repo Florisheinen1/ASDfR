@@ -23,7 +23,7 @@ def generate_launch_description():
 		),
 		# Subs /trackpos and pubs left and right wheel speed
 		Node(
-			package="asg1_2",
+			package="bot_controller",
 			executable="bot_controller",
 			name="bot_controller",
 			output="screen"

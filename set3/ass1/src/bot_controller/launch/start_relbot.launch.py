@@ -18,7 +18,7 @@ def generate_launch_description():
 
         # Start the sequence_controller node
         Node(
-            package="asg1_2",
+            package="bot_controller",
             executable="sequence_controller",
             name="sequence_controller",
             output="screen",
