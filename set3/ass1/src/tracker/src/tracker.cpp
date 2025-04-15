@@ -7,13 +7,15 @@
 #include <float.h>
 #include <utility>
 
-class Tracker : public rclcpp::Node {
+class Tracker : public rclcpp::Node
+{
 public:
-	Tracker() : Node("tracker") {
-		auto topic_callback = [this](sensor_msgs::msg::Image::SharedPtr mask) -> void {
-
+	Tracker() : Node("tracker")
+	{
+		auto topic_callback = [this](sensor_msgs::msg::Image::SharedPtr mask) -> void
+		{
 			auto object_center = this->get_center_of_gravity(mask);
-			
+
 			auto x = object_center.first;
 			auto y = object_center.second;
 
@@ -37,7 +39,8 @@ private:
 	/// @brief Calculates the center of gravity from provided masked image
 	/// @param mask The black and white image
 	/// @return The center of gravity
-	std::pair<int, int> get_center_of_gravity(sensor_msgs::msg::Image::SharedPtr mask) const {
+	std::pair<int, int> get_center_of_gravity(sensor_msgs::msg::Image::SharedPtr mask) const
+	{
 		int width = mask->width;
 		int height = mask->height;
 		int step = mask->step;
@@ -47,10 +50,13 @@ private:
 		int pixel_count = 0;
 
 		// Get coordinates of every white pixel, and sum them up
-		for (int row = 0; row < height; row++) {
-			for (int column = 0; column < width; column++) {
+		for (int row = 0; row < height; row++)
+		{
+			for (int column = 0; column < width; column++)
+			{
 				int index = column + row * step;
-				if (mask->data[index] == 255) {
+				if (mask->data[index] == 255)
+				{
 					sum_x += column;
 					sum_y += row;
 					pixel_count++;
@@ -59,14 +65,15 @@ private:
 		}
 
 		// If there are no pixels (or very few), assume we do not see our target
-		if (pixel_count < 20) {
+		if (pixel_count < 20)
+		{
 			return std::make_pair<int, int>(0, 0);
 		}
 
 		// And calculate the average
 		int center_x = sum_x / pixel_count;
 		int center_y = sum_y / pixel_count;
-		
+
 		// Get center of image
 		int center_image_x = width / 2;
 		int center_image_y = height / 2;
@@ -78,7 +85,7 @@ private:
 	}
 };
 
-int main(int argc, char * argv[])
+int main(int argc, char *argv[])
 {
 	rclcpp::init(argc, argv);
 	rclcpp::spin(std::make_shared<Tracker>());
