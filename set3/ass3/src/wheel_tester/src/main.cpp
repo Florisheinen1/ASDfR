@@ -66,21 +66,19 @@ private:
 				msg.left_wheel_speed = RAD_PER_S;
 				msg.right_wheel_speed = RAD_PER_S;
 			}
-			else if (elapsed_seconds < 10.23)
+			else if (elapsed_seconds < 10.23) // 5.23 seconds should result in 90 degree rotation
 			{
 				msg.left_wheel_speed = RAD_PER_S;
 				msg.right_wheel_speed = -RAD_PER_S;
 			}
 			else
 			{
+				RCLCPP_INFO(this->get_logger(), "Stopped doing line and turn action");
 				this->is_in_action = false;
 			}
+			
+			RCLCPP_INFO(this->get_logger(), "Left=%.1f, Right=%.1f", msg.left_wheel_speed, msg.right_wheel_speed);
 		}
-
-		RCLCPP_INFO(
-			this->get_logger(),
-			"Left=%.1f, Right=%.1f",
-			msg.left_wheel_speed, msg.right_wheel_speed);
 
 		publisher_->publish(msg);
 	}
