@@ -2,6 +2,8 @@
 #include "xrf2_msgs/msg/ros2_xeno.hpp"
 #include "std_msgs/msg/int32.hpp"
 
+#define RAD_PER_S 0.32
+
 using std::placeholders::_1;
 
 class WheelTester : public rclcpp::Node
@@ -44,13 +46,13 @@ private:
 		if (counter < 5) {
 			if (toggle_)
 			{
-				msg.left_wheel_speed = 300.0;
+				msg.left_wheel_speed = RAD_PER_S;
 				msg.right_wheel_speed = 0.0;
 			}
 			else
 			{
 				msg.left_wheel_speed = 0.0;
-				msg.right_wheel_speed = 300.0;
+				msg.right_wheel_speed = RAD_PER_S;
 			}
 			toggle_ = !toggle_;
 			counter++;
