@@ -18,13 +18,13 @@ public:
 
 		auto xeno_state_callback = [this](std_msgs::msg::Int32::SharedPtr current_state) -> void
 		{
-			if (current_state.data == 3)
+			if (current_state->data == 3)
 			{
 				// Done initializing. Publish RUN command!
 
 				auto command = std_msgs::msg::Int32();
 				command.data = 2;
-				state_publisher_.publish(command);
+				state_publisher_->publish(command);
 
 				RCLCPP_INFO(this->get_logger(), "Published START command");
 			}
@@ -50,9 +50,10 @@ public:
 private:
 	void publish_message()
 	{
+
 		auto now = std::chrono::steady_clock::now();
-		std::chrono::duration<int> time_since_start = now - this->start_time;
-		auto elapsed_seconds = time_since_start.count();
+		auto duration = now - this->start_time;
+		double elapsed_seconds = std::chrono::duration<double>(duration).count();
 
 		auto msg = xrf2_msgs::msg::Ros2Xeno();
 		msg.left_wheel_speed = 0;
@@ -65,7 +66,7 @@ private:
 				msg.left_wheel_speed = RAD_PER_S;
 				msg.right_wheel_speed = RAD_PER_S;
 			}
-			else if (elapsed_seconds < 16)
+			else if (elapsed_seconds < 10.23)
 			{
 				msg.left_wheel_speed = RAD_PER_S;
 				msg.right_wheel_speed = -RAD_PER_S;
