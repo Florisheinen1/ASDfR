@@ -118,7 +118,7 @@ int Group15::run()
 	auto controlled_right_speed = u[1];
 
 	// And send the motor power
-	actuate_data.pwm1 = controlled_right_speed;
+	actuate_data.pwm1 = controlled_right_speed; // TODO: Check if this needs a minus sign
 	actuate_data.pwm2 = controlled_left_speed;
 
 	// For debugging only
