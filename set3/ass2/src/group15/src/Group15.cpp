@@ -86,55 +86,55 @@ int Group15::run()
 	logger.start();
 
 	// Fix encoder wrapping
-	// auto right_wheel_encoder = this->sample_data.channel1;
-	// auto left_wheel_encoder = this->sample_data.channel2;
-	// // Undo wrapping
-	// int corrected_left_diff = get_corrected_encoder_value_difference(left_wheel_encoder, this->last_left_encoder_value);
-	// int corrected_right_diff = get_corrected_encoder_value_difference(right_wheel_encoder, this->last_right_encoder_value);
-	// // Calculate total amount of rotations in radians
-	// this->corrected_left_encoder_value += corrected_left_diff;
-	// this->corrected_right_encoder_value += corrected_right_diff;
-	// // Update old encoder values
-	// this->last_left_encoder_value = left_wheel_encoder;
-	// this->last_right_encoder_value = right_wheel_encoder;
+	auto right_wheel_encoder = this->sample_data.channel1;
+	auto left_wheel_encoder = this->sample_data.channel2;
+	// Undo wrapping
+	int corrected_left_diff = get_corrected_encoder_value_difference(left_wheel_encoder, this->last_left_encoder_value);
+	int corrected_right_diff = get_corrected_encoder_value_difference(right_wheel_encoder, this->last_right_encoder_value);
+	// Calculate total amount of rotations in radians
+	this->corrected_left_encoder_value += corrected_left_diff;
+	this->corrected_right_encoder_value += corrected_right_diff;
+	// Update old encoder values
+	this->last_left_encoder_value = left_wheel_encoder;
+	this->last_right_encoder_value = right_wheel_encoder;
 
-	// // Calculate the angle of the wheels (can be multiple rotations)
-	// auto left_wheel_radians = encoder_to_radians(this->corrected_left_encoder_value);
-	// // And negate the right wheel for being inverted
-	// auto right_wheel_radians = encoder_to_radians(-this->corrected_right_encoder_value);
-
+	// Calculate the angle of the wheels (can be multiple rotations)
+	auto left_wheel_radians = encoder_to_radians(this->corrected_left_encoder_value);
+	// And negate the right wheel for being inverted
+	auto right_wheel_radians = encoder_to_radians(-this->corrected_right_encoder_value);
 
 
 	auto target_left_wheel_speed = this->ros_data.left_wheel_speed;
 	auto target_right_wheel_speed = this->ros_data.right_wheel_speed;
 
 	// // Set the PID controller input
-	// u[0] = left_wheel_radians;
-	// u[1] = right_wheel_radians;
-	// u[2] = target_left_wheel_speed;
-	// u[3] = target_right_wheel_speed;
+	u[0] = left_wheel_radians;
+	u[1] = right_wheel_radians;
+	u[2] = target_left_wheel_speed;
+	u[3] = target_right_wheel_speed;
 
-	// controller.Calculate(u, y);
+	controller.Calculate(u, y);
+
+	evl_printf("Raw in left: %f, right: %f, left: %f, right%f\n", u[0], u[1], u[2], u[3]);
+	evl_printf("Raw out left: %f, right: %f\n", y[0], y[1]);
 
 	// // Read the output
 	// auto controlled_left_speed = std::clamp(y[0] * 50, -40.0, 40.0);
 	// auto controlled_right_speed = std::clamp(y[1] * 50, -40.0, 40.0);
 
 	// // And send the motor power
-	// actuate_data.pwm1 = -y[0]; // TODO: Check if this needs a minus sign
-	// actuate_data.pwm2 = y[1];
+	actuate_data.pwm1 = -y[0]; // TODO: Check if this needs a minus sign
+	actuate_data.pwm2 = y[1];
 
 	// // For debugging only
 	// double left_power_percentage = (controlled_left_speed / 2048.0) * 100.0;
 	// double right_power_percentage = (controlled_right_speed / 2048.0) * 100.0;
 	
-	monitor.printf("Target speed: %f, %f\n", target_left_wheel_speed, target_right_wheel_speed);
+	// monitor.printf("Target speed: %f, %f\n", target_left_wheel_speed, target_right_wheel_speed);
 	
 	// evl_printf("Encoder left: %d, right: %d\n", this->corrected_left_encoder_value, this->corrected_right_encoder_value);
 	// evl_printf("Angle left: %f, right: %f\n", left_wheel_radians, right_wheel_radians);
 	// evl_printf("Power left: %f, right: %f\n", left_power_percentage, right_power_percentage);
-	// evl_printf("Raw in left: %f, right: %f, left: %f, right%f\n", u[0], u[1], u[2], u[3]);
-	// evl_printf("Raw out left: %f, right: %f\n", y[0], y[1]);
 	
 	if (controller.IsFinished())
 		return 1;
