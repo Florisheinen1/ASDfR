@@ -21,6 +21,8 @@ public:
 
 		this->declare_parameter("image_topic", "/image");
 
+		this->resulting_image = std::make_shared<sensor_msgs::msg::Image>();
+
 		auto topic_callback = [this](sensor_msgs::msg::Image::SharedPtr colored) -> void
 		{
 			auto masked = mask_image(colored);
@@ -36,6 +38,8 @@ public:
 private:
 	rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr subscription_;
 	rclcpp::Publisher<sensor_msgs::msg::Image>::SharedPtr publisher_;
+
+	sensor_msgs::msg::Image::SharedPtr resulting_image;
 
 	/// @brief Will return a greyscale pixel value that represents if this pixel is green
 	/// @param red The red value of current pixel
@@ -91,16 +95,14 @@ private:
 	/// @return A green-masked image
 	sensor_msgs::msg::Image::SharedPtr mask_image(const sensor_msgs::msg::Image::SharedPtr rgb8_image) const
 	{
-		auto mono = std::make_shared<sensor_msgs::msg::Image>();
+		this->resulting_image->header = rgb8_image->header;
+		this->resulting_image->height = rgb8_image->height;
+		this->resulting_image->width = rgb8_image->width;
+		this->resulting_image->encoding = "mono8";
+		this->resulting_image->is_bigendian = rgb8_image->is_bigendian;
+		this->resulting_image->step = rgb8_image->width;
 
-		mono->header = rgb8_image->header;
-		mono->height = rgb8_image->height;
-		mono->width = rgb8_image->width;
-		mono->encoding = "mono8";
-		mono->is_bigendian = rgb8_image->is_bigendian;
-		mono->step = rgb8_image->width;
-
-		int total_pixels = mono->width * mono->height;
+		int total_pixels = this->resulting_image->width * this->resulting_image->height;
 
 		mono->data.resize(total_pixels);
 
@@ -112,10 +114,10 @@ private:
 			uint8_t blue = rgb8_image->data[rgb8_index + 2];
 
 			uint8_t luminance = this->is_pixel_green(red, green, blue);
-			mono->data[i] = luminance;
+			this->resulting_image->data[i] = luminance;
 		}
 
-		return mono;
+		return this->resulting_image;
 	}
 };
 
