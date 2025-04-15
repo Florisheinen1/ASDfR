@@ -53,7 +53,7 @@ int Group15::initialised()
 	return 0;
 }
 
-int get_corrected_encoder_value_difference(int new_value, int old_value) const {
+int Group15::get_corrected_encoder_value_difference(int new_value, int old_value) const {
 	int half_max_encoder_value = MAX_ENCODER_VALUE / 2;
 
 	int raw_difference = new_value - old_value;
@@ -69,7 +69,7 @@ int get_corrected_encoder_value_difference(int new_value, int old_value) const {
 	return corrected_difference;
 }
 
-double encoder_to_radians(int corrected_encoder_value) const {
+double Group15::encoder_to_radians(int corrected_encoder_value) const {
 	auto un_gearbox_encoder = ((double) corrected_encoder_value) / GEAR_RATIO;
 	auto full_rotations = un_gearbox_encoder * 4;
 	auto radians = full_rotations * 2 * M_PI;

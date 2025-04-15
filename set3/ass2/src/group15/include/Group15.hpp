@@ -33,8 +33,11 @@ private:
 	int corrected_left_encoder_value;
 	int corrected_right_encoder_value;
 
-	double u[2];
+	double u[4];
 	double y[2];
+
+	int get_corrected_encoder_value_difference(int new_value, int old_value) const;
+	double encoder_to_radians(int corrected_encoder_value) const;
 
 protected:
 	// Functions
