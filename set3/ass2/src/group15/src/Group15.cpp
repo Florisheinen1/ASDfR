@@ -14,7 +14,10 @@ Group15::Group15(uint write_decimator_freq, uint monitor_freq) : XenoFrt20Sim(wr
 	// To infinite run the controller, uncomment line below
 	controller.SetFinishTime(0.0);
 
-	this->last_encoder_value = 0;
+	this->last_left_encoder_value = 0;
+	this->last_right_encoder_value = 0;
+	this->corrected_left_encoder_value;
+	this->corrected_right_encoder_value;
 }
 
 Group15::~Group15()
@@ -80,7 +83,6 @@ int Group15::run()
 
 	this->last_left_encoder_value = left_wheel_encoder;
 	this->last_right_encoder_value = right_wheel_encoder;
-
 
 	controller.Calculate(u, y);
 
