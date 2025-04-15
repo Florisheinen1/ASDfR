@@ -1,8 +1,9 @@
 #include "Group15.hpp"
 #include <math.h>
 
-#define MAX_ENCODER_VALUE 16384
+#define MAX_ENCODER_VALUE 16384.0
 #define GEAR_RATIO 15.58
+#define FULL_CIRCLE_ENCODER (4.0 * 1024.0)
 
 Group15::Group15(uint write_decimator_freq, uint monitor_freq) : XenoFrt20Sim(write_decimator_freq, monitor_freq, file, &data_to_be_logged),
 																 file(1, "/home/asdfr-15/logs/log", "bin"), controller()
@@ -70,9 +71,8 @@ int Group15::get_corrected_encoder_value_difference(int new_value, int old_value
 }
 
 double Group15::encoder_to_radians(int corrected_encoder_value) const {
-	auto un_gearbox_encoder = ((double) corrected_encoder_value) / GEAR_RATIO;
-	auto full_rotations = un_gearbox_encoder * 4;
-	auto radians = full_rotations * 2 * M_PI;
+	double encoder_to_radians_ratio = (2*M_PI) / (GEAR_RATIO * 4 * 1024);
+	double radians = corrected_encoder_value * encoder_to_radians_ratio;
 	return radians;
 }
 
@@ -122,14 +122,14 @@ int Group15::run()
 	actuate_data.pwm2 = controlled_left_speed;
 
 	// For debugging only
-	auto left_power_percentage = (controlled_left_speed / 2048) * 100;
-	auto right_power_percentage = (controlled_right_speed / 2048) * 100;
+	double left_power_percentage = (controlled_left_speed / 2048.0) * 100.0;
+	double right_power_percentage = (controlled_right_speed / 2048.0) * 100.0;
 	
 	monitor.printf("Target speed: %f, %f\n", target_left_wheel_speed, target_right_wheel_speed);
 	
 	evl_printf("Encoder left: %d, right: %d\n", this->corrected_left_encoder_value, this->corrected_right_encoder_value);
-	evl_printf("Angle left: %d, right: %d\n", left_wheel_radians, right_wheel_radians);
-	evl_printf("Power left: %d, right: %d\n", left_power_percentage, right_power_percentage);
+	evl_printf("Angle left: %f, right: %f\n", left_wheel_radians, right_wheel_radians);
+	evl_printf("Power left: %f, right: %f\n", left_power_percentage, right_power_percentage);
 	
 	if (controller.IsFinished())
 		return 1;
