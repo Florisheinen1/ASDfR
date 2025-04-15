@@ -10,13 +10,9 @@ public:
 		: Node("wheel_tester"), toggle_(false)
 	{
 
-		this->statemachine_state = 0;
-
 		auto xeno_state_callback = [this](std_msgs::msg::Int32::SharedPtr current_state) -> void
 		{
-			statemachine_state = current_state.data;
-
-			if (statemachine_state == 3)
+			if (current_state.data == 3)
 			{
 				// Done initializing. Publish RUN command!
 
@@ -61,7 +57,6 @@ private:
 	}
 
 	bool toggle_;
-	int statemachine_state;
 	rclcpp::Publisher<xrf2_msgs::msg::Ros2Xeno>::SharedPtr publisher_;
 
 	rclcpp::Publisher<std_msgs::msg::Int32>::SharedPtr state_publisher_;
