@@ -1,5 +1,6 @@
 #include "Group15.hpp"
 #include <math.h>
+#include <algorithm>
 
 #define MAX_ENCODER_VALUE 16384.0
 #define GEAR_RATIO 15.58
@@ -114,8 +115,8 @@ int Group15::run()
 	controller.Calculate(u, y);
 
 	// Read the output
-	auto controlled_left_speed = u[0];
-	auto controlled_right_speed = u[1];
+	auto controlled_left_speed = std::clamp(u[0] * 1024, 0, 40);
+	auto controlled_right_speed = std::clamp(u[1] * 1024, 0, 40);
 
 	// And send the motor power
 	actuate_data.pwm1 = controlled_right_speed; // TODO: Check if this needs a minus sign
