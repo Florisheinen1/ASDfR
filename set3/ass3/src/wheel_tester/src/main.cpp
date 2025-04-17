@@ -66,7 +66,7 @@ private:
 				msg.left_wheel_speed = RAD_PER_S;
 				msg.right_wheel_speed = RAD_PER_S;
 			}
-			else if (elapsed_seconds < 10.23) // 5.23 seconds should result in 90 degree rotation
+			else if (elapsed_seconds < 15.46) // Should be 90 degrees
 			{
 				msg.left_wheel_speed = RAD_PER_S;
 				msg.right_wheel_speed = -RAD_PER_S;

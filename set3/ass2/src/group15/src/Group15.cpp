@@ -3,8 +3,7 @@
 #include <algorithm>
 
 #define MAX_ENCODER_VALUE 16384.0
-#define GEAR_RATIO 15.58
-#define FULL_CIRCLE_ENCODER (4.0 * 1024.0)
+#define POWER_SCALE 100
 
 Group15::Group15(uint write_decimator_freq, uint monitor_freq) : XenoFrt20Sim(write_decimator_freq, monitor_freq, file, &data_to_be_logged),
 																 file(1, "/home/asdfr-15/logs/log", "bin"), controller()
@@ -121,8 +120,8 @@ int Group15::run()
 	evl_printf("Power L: %d, R: %d", out_left, out_right);
 
 	// And send the motor power
-	actuate_data.pwm1 = -out_right; // Inverted for opposite motor
-	actuate_data.pwm2 = out_left;
+	actuate_data.pwm1 = -out_right * POWER_SCALE; // Inverted for opposite motor
+	actuate_data.pwm2 = out_left * POWER_SCALE;
 
 	if (controller.IsFinished())
 		return 1;
