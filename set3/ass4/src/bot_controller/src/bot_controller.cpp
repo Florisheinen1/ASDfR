@@ -46,7 +46,6 @@ private:
 	rclcpp::Publisher<std_msgs::msg::Int32>::SharedPtr state_publisher_;
 	rclcpp::Subscription<std_msgs::msg::Int32>::SharedPtr state_subscription_;
 
-
 	void point_callback(const geometry_msgs::msg::Point::SharedPtr point_msg)
 	{
 		int x_pos = static_cast<int>(point_msg->x);

@@ -29,7 +29,7 @@ private:
 
 	int last_left_encoder_value;
 	int last_right_encoder_value;
-	
+
 	int corrected_left_encoder_value;
 	int corrected_right_encoder_value;
 
